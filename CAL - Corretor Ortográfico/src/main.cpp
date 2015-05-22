@@ -27,4 +27,3 @@ int main(){
 	//dic.writeDictionary("dictionary2.txt");
 	return 0;
 }
-
