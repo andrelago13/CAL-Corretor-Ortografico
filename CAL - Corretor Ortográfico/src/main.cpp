@@ -28,9 +28,5 @@ int main(){
 	//dic.writeDictionary("dictionary2.txt");
 	cout << "Number of nodes: " << TrieNode::id << endl;
 	cout << "Size of each node: " << sizeof(TrieNode) << endl;
-	while (1)
-	{
-
-	}
 	return 0;
 }
