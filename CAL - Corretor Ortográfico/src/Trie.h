@@ -90,11 +90,14 @@ public:
 		}
 	}
 	~TrieNode(){
-		for(int i = 0; i < ALPHABET_SIZE; i++){
+		if (children == NULL) return;
+		for(size_t i = 0; i < ALPHABET_SIZE; i++){
 			if(children[i] != NULL){
 				delete children[i];
 			}
 		}
+		delete children;
+		children = NULL;
 	}
 	size_t map(const char& c) const{
 		if(c == '\'')

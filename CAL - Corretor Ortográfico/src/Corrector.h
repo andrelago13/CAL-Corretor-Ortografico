@@ -292,10 +292,6 @@ public:
 				cout << out << endl;
 			}
 			fin.close();
-			while (1)
-				{
-
-				}
 			std::cerr << "done correcting text" << std::endl;
 			return out;
 		}
