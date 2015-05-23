@@ -19,6 +19,7 @@
 #include "DictionaryEntry.h"
 #include "BKTree.h"
 #include "Trie.h"
+#include <iostream>
 
 
 class WordMatch{
@@ -317,6 +318,10 @@ public:
 						out = new CorrectedLine(linenum);
 					out->addCorrection(correctWordTrie(dic, token,wordCount, tree));
 				}
+			}
+			while (1)
+			{
+
 			}
 			//std::cerr << "done correcting Line" << std::endl;
 			return out;
