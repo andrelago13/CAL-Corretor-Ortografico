@@ -319,10 +319,6 @@ public:
 					out->addCorrection(correctWordTrie(dic, token,wordCount, tree));
 				}
 			}
-			while (1)
-			{
-
-			}
 			//std::cerr << "done correcting Line" << std::endl;
 			return out;
 		}
