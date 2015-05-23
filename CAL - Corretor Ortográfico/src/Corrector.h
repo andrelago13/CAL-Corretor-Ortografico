@@ -19,6 +19,7 @@
 #include "DictionaryEntry.h"
 #include "BKTree.h"
 #include "Trie.h"
+#include <iostream>
 
 
 class WordMatch{

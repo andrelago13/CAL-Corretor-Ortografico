@@ -16,6 +16,7 @@
 
 #define ALPHABET_SIZE (26*2+2)
 #define min_(a,b) (a < b ? a :b)
+#include <iostream>
 
 using namespace std;
 
