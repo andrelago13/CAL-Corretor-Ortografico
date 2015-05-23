@@ -23,7 +23,7 @@ private:
 	std::string word;
 	int count;
 	std::vector<int> pi;
-	int currentPiIndex = 0;
+	unsigned currentPiIndex = 0;
 	int lastEditDistance;
 
 public:

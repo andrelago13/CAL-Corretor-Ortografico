@@ -21,11 +21,11 @@ class BKTreeNode{
 public:
 	BKTreeNode(DictionaryEntry* entry):entry(entry){};
 	void insertEntry(DictionaryEntry* newEntry){
-		int dist = editDistance(entry->getWord(), newEntry->getWord());
+		unsigned dist = editDistance(entry->getWord(), newEntry->getWord());
 		if(dist >= children.size()){
 			int oldsize = children.size();
 			children.resize(dist+1);
-			for(int i = oldsize; i < children.size(); i++){
+			for(size_t i = oldsize; i < children.size(); i++){
 				children[i] = NULL;
 			}
 		}
@@ -54,7 +54,7 @@ public:
 		}
 	}
 	~BKTreeNode(){
-		for(int i = 0; i < children.size(); i++){
+		for(size_t i = 0; i < children.size(); i++){
 			if(children[i] != NULL){
 				delete children[i];
 			}
