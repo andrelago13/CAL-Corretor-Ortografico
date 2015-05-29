@@ -289,7 +289,7 @@ public:
 				linenum++;
 				getline(fin, line);
 				out->addCorrection(correctLineTrie(dic, line, linenum, tree));
-				cout << out << endl;
+				//cout << out << endl;
 			}
 			fin.close();
 			std::cerr << "done correcting text" << std::endl;
@@ -326,9 +326,9 @@ public:
 		static CorrectedWord* correctWordTrie(Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
 			//std::cerr << "correcting word" << std::endl;
 			CorrectedWord* out = new CorrectedWord(word, wordnum);
-			std::vector<string> found = tree.query(word, 2);
+			std::vector<DictionaryEntry*> found = tree.query(word, 2);
 			for(size_t i = 0 ; i < found.size(); i++){
-				DictionaryEntry* temp = dic.findWord(found[i]);
+				DictionaryEntry* temp = found[i];
 					if(temp != NULL)
 						out->addCorrection(temp);
 			}

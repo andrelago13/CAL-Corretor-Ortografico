@@ -13,25 +13,27 @@
 #include <cstring>
 #include <cctype>
 #include <iostream>
+#include "DictionaryEntry.h"
 
 #define ALPHABET_SIZE (26*2+2)
 #define min_(a,b) (a < b ? a :b)
-#include <iostream>
+
+
 
 using namespace std;
 
 class TrieNode{
 	TrieNode **children;
-	bool endpoint;
+	DictionaryEntry* endpoint;
 public:
 	static unsigned long long id;
-	TrieNode(): endpoint(false) {
+	TrieNode(): endpoint(NULL) {
 		children = NULL;
 		++id;
 	}
-	void insertEntry(const string& word, unsigned index){
-		if(index == word.length() - 1){
-			endpoint = true;
+	void insertEntry(DictionaryEntry* entry, const string& word, unsigned index){
+		if(index == word.length()){
+			endpoint = entry;
 			return;
 		}
 		unsigned mapIndex = map(word[index]);
@@ -44,7 +46,7 @@ public:
 		{
 			children[mapIndex] = new TrieNode();
 		}
-		children[mapIndex]->insertEntry(word, index+1);
+		children[mapIndex]->insertEntry(entry, word, index+1);
 	}
 	char unmap(size_t i) const{
 		if(i == ALPHABET_SIZE-2)
@@ -55,7 +57,7 @@ public:
 			return i + 'A';
 		else return i-26 + 'a';
 	}
-	void query(vector<string>& output, const string& word, int maxdist, int index, vector<vector<int> >& matrix, string& current) const{
+	void query(vector<DictionaryEntry*>& output, const string& word, int maxdist, int index, vector<vector<int> >& matrix, string& current) const{
 		if(index != -1){
 			matrix.push_back(vector<int>(word.size()+1));
 			matrix[index+1][0] = index+1;
@@ -69,13 +71,15 @@ public:
 					matrix[index+1][i] = matrix[index][i-1];
 				}
 			}
-
+			//if(current == "engineers")
+				//cerr << "------------>here <-------------" << endl;
 			if(matrix[index+1][index+1] > maxdist)//check
 			{
 				return;
 			}
 			else if(endpoint && matrix[index+1][word.length()] <= maxdist){
-				output.push_back(string(current));
+				endpoint->setLastEditDistance(matrix[index+1][word.length()]);
+				output.push_back(endpoint);
 			}
 		}
 		if (children == NULL)
@@ -112,6 +116,7 @@ public:
 	}
 	void print(string& word){
 		cerr << word << "\n";
+		if(children != NULL)
 		for(size_t i = 0; i < ALPHABET_SIZE; i++){
 			if(children[i] != NULL){
 				word += unmap(i);
@@ -131,8 +136,8 @@ public:
 		if(root != NULL)
 			delete root;
 	}
-	vector<string> query(const string& word, int maxdist) const{
-		vector<string> out;
+	vector<DictionaryEntry*> query(const string& word, int maxdist) const{
+		vector<DictionaryEntry*> out;
 		vector<vector<int> > matrix;
 		matrix.push_back(vector<int>(word.size()+1));
 		for(size_t i = 0; i <= word.size(); i++){
@@ -144,8 +149,8 @@ public:
 		}
 		return out;
 	}
-	void insertEntry(const string& word){
-		root->insertEntry(word, 0);
+	void insertEntry(DictionaryEntry* entry, const string& word){
+		root->insertEntry(entry, word, 0);
 	}
 	void print(){
 		std::cerr << "\n";

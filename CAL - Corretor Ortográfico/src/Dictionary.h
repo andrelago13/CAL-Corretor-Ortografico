@@ -161,7 +161,7 @@ public:
 		int count = 0;
 		for(; iti != ite; ++iti){
 			count++;
-			out.insertEntry((*iti)->getWord());
+			out.insertEntry(*iti, (*iti)->getWord());
 		}
 		cerr << count << endl;
 		return out;
