@@ -27,7 +27,7 @@ private:
 	void readProcessedDictionary(std::string filename) {
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
-			throw new DictionaryException("Invalid file name");
+			throw DictionaryException("Invalid file name");
 		std::string word;
 		int num;
 		//std::stringstream ss;
@@ -190,6 +190,14 @@ public:
 		}
 		cerr << count << endl;
 		return out;
+	}
+
+	~Dictionary()
+	{
+		for (std::set<DictionaryEntry*>::const_iterator it = entries.begin(); it != entries.end(); ++it)
+		{
+			delete *it;
+		}
 	}
 };
 

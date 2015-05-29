@@ -50,7 +50,7 @@ public:
 
 
 class CorrectedWord{
-public: //yolo
+public:
 	static size_t MAX_SUGGESTIONS;
 	int wordNum;
 	std::string word;
@@ -92,7 +92,7 @@ public: //yolo
 size_t CorrectedWord::MAX_SUGGESTIONS = 10;
 
 class CorrectedLine{
-public://yolo
+public:
 	int line;
 	std::vector<CorrectedWord*> lineCorrections;
 	~CorrectedLine(){
@@ -117,7 +117,7 @@ public://yolo
 };
 
 class CorrectedText{
-public://yolo
+public:
 	std::vector<CorrectedLine*> textCorrections;
 	void addCorrection(CorrectedLine* correction){
 		if(correction != NULL)
