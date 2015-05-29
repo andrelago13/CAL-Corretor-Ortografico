@@ -79,7 +79,9 @@ public:
 			}
 		}
 		if (children == NULL)
+		{
 			return;
+		}
 		for(size_t i = 0; i < ALPHABET_SIZE; i++){
 			if(children[i] != NULL){
 				current += unmap(i);

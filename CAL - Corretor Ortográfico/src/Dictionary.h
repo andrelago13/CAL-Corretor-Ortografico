@@ -49,7 +49,6 @@ private:
 			if(found)
 				continue;
 			DictionaryEntry* entry = new DictionaryEntry(word, num);
-			entry->computePrefixFunction();
 			entries.insert(entry);
 		}
 		fin.close();
@@ -65,13 +64,12 @@ private:
 			if(word.size() == 1 && !(word == "a" || word =="A"))
 				continue;
 			DictionaryEntry* entry = new DictionaryEntry(word);
-			entry->computePrefixFunction();
 			entries.insert(entry);
 		}
 		fin.close();
 	}
 public:
-	bool writeDictionary(std::string filename){
+	void writeDictionary(std::string filename){
 			std::ofstream fout(filename.c_str());
 			if(!fout.is_open())
 				throw new DictionaryException("Invalid file name");
@@ -82,28 +80,6 @@ public:
 			}
 			fout.close();
 		}
-	void countWords(std::string& filename) {
-		std::ifstream fin(filename.c_str());
-		if(!fin.is_open())
-			throw new DictionaryException("Invalid file name");
-		std::set<DictionaryEntry*>::iterator iti = entries.begin();
-		std::set<DictionaryEntry*>::iterator ite = entries.end();
-		for(; iti != ite; ++iti){
-			(*iti)->resetPiIndex();
-		}
-		while(!fin.eof()){
-			std::string line;
-			getline(fin, line);
-			for(size_t i = 0; i < line.length(); i++){
-				iti = entries.begin();
-				for(; iti != ite; ++iti){
-					(*iti)->processChar(line[i]);
-					//std::cerr << "processed char" << std::endl;
-				}
-			}
-		}
-		fin.close();
-	}
 	void countWholeWords(std::string& filename) {
 			std::ifstream fin(filename.c_str());
 			if(!fin.is_open())
@@ -173,7 +149,6 @@ public:
 		BKTree out;
 		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti = entries.begin();
 		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator ite = entries.end();
-		int count = 0;
 		for(; iti != ite; ++iti){
 			out.insertEntry(*iti);
 		}

@@ -22,23 +22,16 @@ class DictionaryEntry{
 private:
 	std::string word;
 	int count;
-	std::vector<int> pi;
-	unsigned currentPiIndex = 0;
 	int lastEditDistance;
 
 public:
-	DictionaryEntry(std::string word,std::vector<int> pi, int count = 0){
+	DictionaryEntry(std::string word,float count = 0) {
 		this->word = word;
 		this->count = count;
-		this->pi = pi;
 		lastEditDistance = -1;
-
-	}
-	DictionaryEntry(std::string word,float count = 0): DictionaryEntry(word, std::vector<int>(), count) {
-
 	}
 	int incCount(){
-		count++;
+		return count++;
 	}
 
 	int getCount() const {
@@ -56,10 +49,6 @@ public:
 		lastEditDistance = newDist;
 	}
 
-	const std::vector<int>& getPi() const {
-		return pi;
-	}
-
 	const std::string& getWord() const {
 		return word;
 	}
@@ -67,38 +56,12 @@ public:
 		lastEditDistance = editDistance(word,second_word);
 		return lastEditDistance;
 	}
-	void computePrefixFunction(){
-		if(pi.size() == word.length())
-			return;
-		pi = computePrefix(word);
-	}
 	bool operator<(const DictionaryEntry& entry2) const{
 		return word < entry2.word;
 	}
 	friend std::ostream& operator <<(std::ostream& os, DictionaryEntry dic){
 		os << std::setw(WORD_SPACE) << dic.word << " " << "count: " << dic.count;
-		os << " Prefixes: [ ";
-		for(size_t i = 0; i < dic.pi.size(); i++){
-			os << dic.pi[i] << " ";
-		}
-		os << "]";
 		return os;
-	}
-	void resetPiIndex(){
-		currentPiIndex = 0;
-	}
-	void processChar(const char& c){
-		while(currentPiIndex > 0 && word[currentPiIndex] != c){
-			//std::cerr << "loopin"  << currentPiIndex << ", " << word[currentPiIndex] << ", " << c << std::endl;
-			currentPiIndex = pi[currentPiIndex];
-		}
-		if(word[currentPiIndex] == c)
-			currentPiIndex++;
-		if(currentPiIndex == word.size()){
-			count++;
-			currentPiIndex =  pi[currentPiIndex];
-			std::cerr << "found " << word << ", count" << count << std::endl;
-		}
 	}
 	struct EntryComp{
 		bool operator()( DictionaryEntry * e1,  DictionaryEntry* e2){
