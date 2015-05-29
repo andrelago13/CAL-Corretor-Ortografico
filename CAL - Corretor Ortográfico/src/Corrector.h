@@ -44,7 +44,7 @@ public:
 		return distance;
 	}
 	int getCount()const{
-		entry->getCount();
+		return entry->getCount();
 	}
 };
 
