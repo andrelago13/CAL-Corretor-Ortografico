@@ -19,6 +19,7 @@
 #include "DictionaryEntry.h"
 #include "BKTree.h"
 #include "Trie.h"
+#include <iostream>
 
 
 class WordMatch{
@@ -267,7 +268,7 @@ public:
 			//std::cerr << "correcting word" << std::endl;
 			CorrectedWord* out = new CorrectedWord(word, wordnum);
 			std::vector<DictionaryEntry*> found = tree.query(word, 2);
-			for(int i = 0 ; i < found.size(); i++){
+			for(size_t i = 0 ; i < found.size(); i++){
 				out->addCorrection(found[i]);
 			}
 			//std::cerr << "done correcting word" << std::endl;
@@ -288,9 +289,10 @@ public:
 				linenum++;
 				getline(fin, line);
 				out->addCorrection(correctLineTrie(dic, line, linenum, tree));
+				cout << out << endl;
 			}
 			fin.close();
-			//std::cerr << "done correcting text" << std::endl;
+			std::cerr << "done correcting text" << std::endl;
 			return out;
 		}
 		static CorrectedLine* correctLineTrie(Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
@@ -325,7 +327,7 @@ public:
 			//std::cerr << "correcting word" << std::endl;
 			CorrectedWord* out = new CorrectedWord(word, wordnum);
 			std::vector<string> found = tree.query(word, 2);
-			for(int i = 0 ; i < found.size(); i++){
+			for(size_t i = 0 ; i < found.size(); i++){
 				DictionaryEntry* temp = dic.findWord(found[i]);
 					if(temp != NULL)
 						out->addCorrection(temp);

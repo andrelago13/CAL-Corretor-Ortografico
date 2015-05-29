@@ -12,28 +12,39 @@
 #include <string>
 #include <cstring>
 #include <cctype>
+#include <iostream>
+
 #define ALPHABET_SIZE (26*2+2)
 #define min_(a,b) (a < b ? a :b)
+#include <iostream>
 
 using namespace std;
 
 class TrieNode{
-	TrieNode* children[ALPHABET_SIZE];
+	TrieNode **children;
 	bool endpoint;
 public:
-	TrieNode(){
-		memset(children, NULL, ALPHABET_SIZE * sizeof(TrieNode*));
+	static unsigned long long id;
+	TrieNode(): endpoint(false) {
+		children = NULL;
+		++id;
 	}
-	void insertEntry(const string& word, int index){
-		if(index == word.length()){
-			//cerr << "inserted " << word << endl;
+	void insertEntry(const string& word, unsigned index){
+		if(index == word.length() - 1){
 			endpoint = true;
 			return;
 		}
-		else if(children[map(word[index])] == NULL){
-			children[map(word[index])] = new TrieNode();
+		unsigned mapIndex = map(word[index]);
+		if (children == NULL)
+		{
+			children = new TrieNode*[ALPHABET_SIZE];
+			memset(children, (int)NULL, ALPHABET_SIZE * sizeof(TrieNode *));
 		}
-		children[map(word[index])]->insertEntry(word, index+1);
+		if (children[mapIndex] == NULL)
+		{
+			children[mapIndex] = new TrieNode();
+		}
+		children[mapIndex]->insertEntry(word, index+1);
 	}
 	char unmap(size_t i) const{
 		if(i == ALPHABET_SIZE-2)
@@ -48,7 +59,7 @@ public:
 		if(index != -1){
 			matrix.push_back(vector<int>(word.size()+1));
 			matrix[index+1][0] = index+1;
-			for(int i = 1; i <= word.size(); i++){
+			for(size_t i = 1; i <= word.size(); i++){
 				int num = 0;
 				if(current[index] != word[i-1]){
 					num = min_( min_(matrix[index+1][i-1],matrix[index][i]), matrix[index][i-1]);
@@ -67,6 +78,8 @@ public:
 				output.push_back(string(current));
 			}
 		}
+		if (children == NULL)
+			return;
 		for(size_t i = 0; i < ALPHABET_SIZE; i++){
 			if(children[i] != NULL){
 				current += unmap(i);
@@ -77,11 +90,14 @@ public:
 		}
 	}
 	~TrieNode(){
-		for(int i = 0; i < ALPHABET_SIZE; i++){
+		if (children == NULL) return;
+		for(size_t i = 0; i < ALPHABET_SIZE; i++){
 			if(children[i] != NULL){
 				delete children[i];
 			}
 		}
+		delete children;
+		children = NULL;
 	}
 	size_t map(const char& c) const{
 		if(c == '\'')
@@ -130,7 +146,7 @@ public:
 		root->insertEntry(word, 0);
 	}
 	void print(){
-		cerr << "\n";
+		std::cerr << "\n";
 		for(char c = 'A'; c <= 'Z'; c++){
 			cerr << root->map(c)<<", ";
 		}

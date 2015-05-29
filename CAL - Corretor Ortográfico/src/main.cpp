@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Dictionary.h"
 #include "Corrector.h"
+#include "Trie.h"
 
 using namespace std;
 
@@ -25,5 +26,7 @@ int main(){
 	//cout << dic << endl;
 	cout << corr << endl;
 	//dic.writeDictionary("dictionary2.txt");
+	cout << "Number of nodes: " << TrieNode::id << endl;
+	cout << "Size of each node: " << sizeof(TrieNode) << endl;
 	return 0;
 }

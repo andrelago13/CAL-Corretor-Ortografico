@@ -40,7 +40,7 @@ private:
 			//if(word.size() == 1 && !(word == "a" || word =="A"))
 				//continue;
 			bool found = false;
-			for(int i = 0; i < word.size(); i++){
+			for(size_t i = 0; i < word.size(); i++){
 				if(word[i] != '-' && word[i] != '\'' && !isalpha(word[i])){
 					found = true;
 					break;
