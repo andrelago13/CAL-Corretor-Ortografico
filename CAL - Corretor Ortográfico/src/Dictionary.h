@@ -17,12 +17,31 @@
 #include "DictionaryEntry.h"
 #include "BKTree.h"
 #include "Trie.h"
+#include <unordered_set>
+
+struct hstr {
+	int operator() (const DictionaryEntry *entry) const {
+		int v = 0;
+		const string s1 = entry->getWord();
+		for (unsigned int i = 0; i < s1.length(); i++)
+			v = 37 * v + s1[i];
+		return v;
+	}
+};
+
+struct eqstr {
+	bool operator() ( const DictionaryEntry *entry1, const DictionaryEntry *entry2) const {
+		return *entry1 == *entry2;
+	}
+};
+
+typedef std::unordered_set<DictionaryEntry *, hstr, eqstr> hash_table;
 
 class Dictionary{
 	friend class Corrector;
 
 private:
-	std::set<DictionaryEntry*, DictionaryEntry::EntryComp> entries;
+	hash_table entries;
 
 	void readProcessedDictionary(std::string filename) {
 		std::ifstream fin(filename.c_str());
@@ -73,8 +92,8 @@ public:
 			std::ofstream fout(filename.c_str());
 			if(!fout.is_open())
 				throw new DictionaryException("Invalid file name");
-			std::set<DictionaryEntry*>::iterator iti = entries.begin();
-			std::set<DictionaryEntry*>::iterator ite = entries.end();
+			hash_table::iterator iti = entries.begin();
+			hash_table::iterator ite = entries.end();
 			for(; iti != ite; ++iti){
 				fout << (*iti)->getWord() << " " << (*iti)->getCount() << std::endl;
 			}
@@ -88,7 +107,7 @@ public:
 			while(!fin.eof()){
 				fin >> word;
 				DictionaryEntry* entry = new DictionaryEntry(word);
-				std::set<DictionaryEntry*>::iterator iti;
+				hash_table::iterator iti;
 				if((iti = entries.find(entry)) != entries.end()){
 					(*iti)->incCount();
 					std::cerr << "found " << word<< std::endl;
@@ -98,7 +117,7 @@ public:
 			fin.close();
 		}
 	DictionaryEntry* findWord(std::string& word) {
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti;
+		hash_table::iterator iti;
 		DictionaryEntry* entry = new DictionaryEntry(word);
 		iti = entries.find(entry);
 		delete entry;
@@ -128,8 +147,8 @@ public:
 	};
 	friend std::ostream& operator <<(std::ostream& os, const Dictionary& dic){
 		os << "number of entries in dictionary: " << dic.entries.size() <<"\n";
-		std::set<DictionaryEntry*>::const_iterator iti = dic.entries.begin();
-		std::set<DictionaryEntry*>::const_iterator ite = dic.entries.end();
+		hash_table::const_iterator iti = dic.entries.begin();
+		hash_table::const_iterator ite = dic.entries.end();
 		for(; iti != ite; ++iti){
 			os << **iti << "\n";
 		}
@@ -137,8 +156,8 @@ public:
 		return os;
 	}
 	void debug(){
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti = entries.begin();
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator ite = entries.end();
+		hash_table::iterator iti = entries.begin();
+		hash_table::iterator ite = entries.end();
 		int count = 0;
 		for(; iti != ite; ++iti){
 			count++;
@@ -147,8 +166,8 @@ public:
 	}
 	BKTree fillBKTree(){
 		BKTree out;
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti = entries.begin();
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator ite = entries.end();
+		hash_table::iterator iti = entries.begin();
+		hash_table::iterator ite = entries.end();
 		for(; iti != ite; ++iti){
 			out.insertEntry(*iti);
 		}
@@ -156,8 +175,8 @@ public:
 	}
 	Trie fillTrie(){
 		Trie out;
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti = entries.begin();
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator ite = entries.end();
+		hash_table::iterator iti = entries.begin();
+		hash_table::iterator ite = entries.end();
 		int count = 0;
 		for(; iti != ite; ++iti){
 			count++;
@@ -169,7 +188,7 @@ public:
 
 	~Dictionary()
 	{
-		for (std::set<DictionaryEntry*>::const_iterator it = entries.begin(); it != entries.end(); ++it)
+		for (hash_table::const_iterator it = entries.begin(); it != entries.end(); ++it)
 		{
 			delete *it;
 		}

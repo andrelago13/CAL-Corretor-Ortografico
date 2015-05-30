@@ -22,7 +22,7 @@ vector<int> computePrefix(std::string& toSearch) {
 	vector<int> out(toSearch.length()+1);
 	out[1] = 0;
 	int k = 0;
-	for(int q = 2; q < toSearch.length() +1; q++){
+	for(size_t q = 2; q < toSearch.length() +1; q++){
 		while(k>0 && toSearch[k+1] != toSearch[q])
 			k = out[k];
 		if(toSearch[k+1] == toSearch[q])

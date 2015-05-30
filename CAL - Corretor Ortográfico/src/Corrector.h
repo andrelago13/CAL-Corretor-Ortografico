@@ -205,8 +205,8 @@ public:
 	static CorrectedWord* correctWord(Dictionary& dic, std::string& word, int wordnum){
 		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti = dic.entries.begin();
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator ite = dic.entries.end();
+		hash_table::iterator iti = dic.entries.begin();
+		hash_table::iterator ite = dic.entries.end();
 		for(; iti != ite; ++iti){
 			if(correctorValidation(word, (*iti)->getWord())){
 				(*iti)->calculateEditDistance(word);

@@ -59,6 +59,10 @@ public:
 	bool operator<(const DictionaryEntry& entry2) const{
 		return word < entry2.word;
 	}
+	bool operator==(const DictionaryEntry &entry) const
+	{
+		return word == entry.word;
+	}
 	friend std::ostream& operator <<(std::ostream& os, DictionaryEntry dic){
 		os << std::setw(WORD_SPACE) << dic.word << " " << "count: " << dic.count;
 		return os;
