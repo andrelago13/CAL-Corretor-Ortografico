@@ -64,15 +64,22 @@ public:
 			for(size_t i = 1; i <= word.size(); i++){
 				int num = 0;
 				if(current[index] != word[i-1]){
-					num = min_( min_(matrix[index+1][i-1],matrix[index][i]), matrix[index][i-1]);
-					matrix[index+1][i] = num+1;
+					if (current[index] == word[i - 2] && current[index - 1] == word[i - 1]) // Letters swapped
+					{
+						matrix[index + 1][i] = matrix[index][i - 1];
+					}
+					else
+					{
+						num = min_( min_(matrix[index+1][i-1],matrix[index][i]), matrix[index][i-1]);
+						matrix[index+1][i] = num+1;
+					}
 				}
 				else {
 					matrix[index+1][i] = matrix[index][i-1];
 				}
 			}
 			//if(current == "engineers")
-				//cerr << "------------>here <-------------" << endl;
+			//cerr << "------------>here <-------------" << endl;
 			if(matrix[index+1][index+1] > maxdist)//check
 			{
 				return;
@@ -117,13 +124,13 @@ public:
 	void print(string& word){
 		cerr << word << "\n";
 		if(children != NULL)
-		for(size_t i = 0; i < ALPHABET_SIZE; i++){
-			if(children[i] != NULL){
-				word += unmap(i);
-				children[i]->print(word);
-				word.resize(word.size()-1);
+			for(size_t i = 0; i < ALPHABET_SIZE; i++){
+				if(children[i] != NULL){
+					word += unmap(i);
+					children[i]->print(word);
+					word.resize(word.size()-1);
+				}
 			}
-		}
 	}
 
 };
