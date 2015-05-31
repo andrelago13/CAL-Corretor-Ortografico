@@ -80,7 +80,7 @@ int editDistance(string pattern, string text){
 	for(size_t j = 1; j < pattern.size() + 1; j++){
 		for(size_t i = 1; i < text.size() + 1; i++){
 			int num = 0;
-			if(toupper(pattern[j-1]) != toupper(text[i-1])){
+			if(pattern[j-1] != text[i-1]){
 				if (pattern[j - 1] == text[i - 2] && pattern[j - 2] == text[i - 1]) // Letters swapped
 				{
 					matrix[j][i] = matrix[j-1][i-1];
