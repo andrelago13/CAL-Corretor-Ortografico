@@ -32,11 +32,8 @@ public:
 		this->count = count;
 		this->pi = pi;
 		lastEditDistance = -1;
-
 	}
-	DictionaryEntry(std::string word,float count = 0): DictionaryEntry(word, std::vector<int>(), count) {
-
-	}
+	DictionaryEntry(std::string word,float count = 0): DictionaryEntry(word, std::vector<int>(), count) {}
 	int incCount(){
 		count++;
 	}
