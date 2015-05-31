@@ -104,7 +104,6 @@ float numApproximateStringMatching(string filename, string toSearch){
 
 	int count = 0;
 	int acc = 0;
-	cout  << editDistance("mara", "paulo");
 	while(!fin.eof()){
 		string line;
 		getline(fin, line);
