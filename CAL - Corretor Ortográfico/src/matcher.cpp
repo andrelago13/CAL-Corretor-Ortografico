@@ -22,7 +22,7 @@ vector<int> computePrefix(std::string& toSearch) {
 	vector<int> out(toSearch.length()+1);
 	out[1] = 0;
 	int k = 0;
-	for(int q = 2; q < toSearch.length() +1; q++){
+	for(size_t q = 2; q < toSearch.length() +1; q++){
 		while(k>0 && toSearch[k+1] != toSearch[q])
 			k = out[k];
 		if(toSearch[k+1] == toSearch[q])
@@ -39,8 +39,8 @@ int numStringMatching(string filename, string toSearch){
 	while(!fin.eof()){
 		string line;
 		getline(fin, line);
-		int pi = 0;
-		for(int i = 0; i <= line.length(); i++){
+		unsigned pi = 0;
+		for(size_t i = 0; i <= line.length(); i++){
 			while(pi > 0 && toSearch[pi] != line[i])
 				pi = prefix[pi-1];
 			if(toSearch[pi] == line[i])
@@ -68,21 +68,28 @@ int numStringMatching(string filename, string toSearch){
 
 int editDistance(string pattern, string text){
 	vector<vector<int> > matrix;
-	for(int i = 0; i < pattern.size()+1; i++){
+	for(size_t i = 0; i < pattern.size()+1; i++){
 		matrix.push_back(vector<int>(text.size()+1));
 	}
-	for(int j = 0; j < pattern.size() + 1; j++){
+	for(size_t j = 0; j < pattern.size() + 1; j++){
 		matrix[j][0] = j;
 	}
-	for(int i = 0; i < text.size() + 1; i++){
+	for(size_t i = 0; i < text.size() + 1; i++){
 		matrix[0][i] = i;
 	}
-	for(int j = 1; j < pattern.size() + 1; j++){
-		for(int i = 1; i < text.size() + 1; i++){
+	for(size_t j = 1; j < pattern.size() + 1; j++){
+		for(size_t i = 1; i < text.size() + 1; i++){
 			int num = 0;
-			if(toupper(pattern[j-1]) != toupper(text[i-1])){
-				num = min_( min_(matrix[j][i-1],matrix[j-1][i]), matrix[j-1][i-1]);
-				matrix[j][i] = num+1;
+			if(pattern[j-1] != text[i-1]){
+				if (pattern[j - 1] == text[i - 2] && pattern[j - 2] == text[i - 1]) // Letters swapped
+				{
+					matrix[j][i] = matrix[j-1][i-1];
+				}
+				else
+				{
+					num = min_( min_(matrix[j][i-1],matrix[j-1][i]), matrix[j-1][i-1]);
+					matrix[j][i] = num+1;
+				}
 			}
 			else {
 				matrix[j][i] = matrix[j-1][i-1];
@@ -97,7 +104,6 @@ float numApproximateStringMatching(string filename, string toSearch){
 
 	int count = 0;
 	int acc = 0;
-	cout  << editDistance("mara", "paulo");
 	while(!fin.eof()){
 		string line;
 		getline(fin, line);
@@ -105,8 +111,8 @@ float numApproximateStringMatching(string filename, string toSearch){
 		string token;
 		while(getline(iss, token, ' '))
 		{
-		    count++;
-		    acc += editDistance(toSearch, token);
+			count++;
+			acc += editDistance(toSearch, token);
 		}
 	}
 	cout << count <<  endl;

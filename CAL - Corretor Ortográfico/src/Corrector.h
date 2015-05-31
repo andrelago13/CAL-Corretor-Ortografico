@@ -128,7 +128,7 @@ public:
 size_t CorrectedWord::MAX_SUGGESTIONS = 10;
 
 class CorrectedLine{
-public://yolo
+public:
 	int line;
 	std::vector<CorrectedWord*> lineCorrections;
 	~CorrectedLine(){
@@ -184,7 +184,7 @@ public://yolo
 };
 
 class CorrectedText{
-public://yolo
+public:
 	std::vector<CorrectedLine*> textCorrections;
 	void addCorrection(CorrectedLine* correction){
 		if(correction != NULL)
@@ -224,6 +224,7 @@ public:
 			return message;
 		}
 	};
+
 	static CorrectedText* correct(Dictionary& dic, std::string filename){
 		//std::cerr << "correcting text" << std::endl;
 		std::ifstream fin(filename.c_str());
@@ -241,6 +242,7 @@ public:
 		//std::cerr << "done correcting text" << std::endl;
 		return out;
 	}
+
 	static CorrectedLine* correctLine(Dictionary& dic, const std::string& line, int linenum){
 		//std::cerr << "correcting Line" << std::endl;
 		int wordCount = 0;
@@ -269,11 +271,12 @@ public:
 		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
+
 	static CorrectedWord* correctWord(Dictionary& dic, std::string& word, int wordnum){
 		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator iti = dic.entries.begin();
-		std::set<DictionaryEntry*, DictionaryEntry::EntryComp>::iterator ite = dic.entries.end();
+		hash_table::iterator iti = dic.entries.begin();
+		hash_table::iterator ite = dic.entries.end();
 		for(; iti != ite; ++iti){
 			if(correctorValidation(word, (*iti)->getWord())){
 				(*iti)->calculateEditDistance(word);
@@ -356,7 +359,7 @@ public:
 			linenum++;
 			getline(fin, line);
 			out->addCorrection(correctLineTrie(dic, line, linenum, tree));
-			cout << out << endl;
+			//cout << out << endl;
 		}
 		fin.close();
 		std::cerr << "done correcting text" << std::endl;
@@ -377,16 +380,6 @@ public:
 				if(isalpha(token[i]))
 					break;
 			}
-			token = token.substr(0,i+1);
-			if(token.length() == 0 )
-				continue;
-			wordCount++;
-			if(dic.findWord(token) == NULL){
-				errorCount++;
-				if(out == NULL)
-					out = new CorrectedLine(linenum);
-				out->addCorrection(correctWordTrie(dic, token,wordCount, tree));
-			}
 		}
 		//std::cerr << "done correcting Line" << std::endl;
 		return out;
@@ -394,15 +387,16 @@ public:
 	static CorrectedWord* correctWordTrie(Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
 		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
-		std::vector<string> found = tree.query(word, 2);
+		std::vector<DictionaryEntry*> found = tree.query(word, 2);
 		for(size_t i = 0 ; i < found.size(); i++){
-			DictionaryEntry* temp = dic.findWord(found[i]);
+			DictionaryEntry* temp = found[i];
 			if(temp != NULL)
 				out->addCorrection(temp);
 		}
-		//std::cerr << "done correcting word" << std::endl;
+		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
+
 	static bool correctorValidation(const std::string& w1, const std::string& w2){
 		return true;
 		if(abs((int)w1.length() - (int)w2.length()) < 5){
@@ -501,19 +495,19 @@ public:
 		string newWord = word;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		int maxDist = 2;
-		std::vector<string> found = tree.query(word, maxDist);
+		std::vector<DictionaryEntry*> found = tree.query(word, maxDist);
 
 		cout << "Word Number " << wordnum << ": " << word << std::endl << "Suggestions:" << std::endl;
 		cout << "0 - Add \"" << word << "\" to dictionary" << std::endl;
 
 		while(++maxDist <= 6 && found.size() <= 0)
 		{
-			std::vector<string> temp = tree.query(word, maxDist);
+			std::vector<DictionaryEntry*> temp = tree.query(word, maxDist);
 			found.insert(found.end(), temp.begin(), temp.end());
 		}
 
 		for(size_t i = 0 ; i < found.size(); i++){
-			DictionaryEntry* temp = dic.findWord(found[i]);
+			DictionaryEntry* temp = dic.findWord(found[i]->getWord());
 			if(temp != NULL)
 				out->addCorrection(temp);
 		}
