@@ -23,56 +23,23 @@ private:
 	std::string word;
 	int count;
 	int lastEditDistance;
-
 public:
-	DictionaryEntry(std::string word,float count = 0) {
-		this->word = word;
-		this->count = count;
-		lastEditDistance = -1;
-	}
-	int incCount(){
-		return count++;
-	}
-
-	int getCount() const {
-		return count;
-	}
-
-	void setCount(int count) {
-		this->count = count;
-	}
-
-	int getLastEditDistance() const {
-		return lastEditDistance;
-	}
-	void setLastEditDistance(int newDist) {
-		lastEditDistance = newDist;
-	}
-
-	const std::string& getWord() const {
-		return word;
-	}
-	int calculateEditDistance(const std::string& second_word){
-		lastEditDistance = editDistance(word,second_word);
-		return lastEditDistance;
-	}
-	bool operator<(const DictionaryEntry& entry2) const{
-		return word < entry2.word;
-	}
-	bool operator==(const DictionaryEntry &entry) const
-	{
-		return word == entry.word;
-	}
-	friend std::ostream& operator <<(std::ostream& os, DictionaryEntry dic){
-		os << std::setw(WORD_SPACE) << dic.word << " " << "count: " << dic.count;
-		return os;
-	}
+	DictionaryEntry(std::string word,float count = 0);
+	int incCount();
+	int getCount() const;
+	void setCount(int count);
+	int getLastEditDistance() const;
+	void setLastEditDistance(int newDist);
+	const std::string& getWord() const;
+	int calculateEditDistance(const std::string& second_word);
+	bool operator<(const DictionaryEntry& entry2) const;
+	bool operator==(const DictionaryEntry &entry) const;
+	friend std::ostream& operator <<(std::ostream& os, DictionaryEntry dic);
 	struct EntryComp{
 		bool operator()( DictionaryEntry * e1,  DictionaryEntry* e2){
 			return *e1 < *e2;
 		}
 	};
-
 };
 
 
