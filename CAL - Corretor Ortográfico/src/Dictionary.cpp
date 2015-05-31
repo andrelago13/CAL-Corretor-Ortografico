@@ -80,7 +80,7 @@ void Dictionary::countWholeWords(std::string& filename) {
 	}
 	fin.close();
 }
-DictionaryEntry* Dictionary::findWord(const std::string& word) {
+DictionaryEntry* Dictionary::findWord(std::string& word) {
 	hash_table::iterator iti;
 	DictionaryEntry* entry = new DictionaryEntry(word);
 	iti = entries.find(entry);
