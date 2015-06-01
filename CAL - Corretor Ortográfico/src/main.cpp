@@ -10,6 +10,9 @@
 #include "Corrector.h"
 #include "Trie.h"
 #include "Benchmark.h"
+#include "TrieBenchmark.h"
+#include "BKTreeBenchmark.h"
+#include <chrono>
 
 using namespace std;
 
@@ -36,11 +39,14 @@ void run()
 	cout << "Size of each node: " << sizeof(TrieNode) << endl;
 	//delete corr;
 
-
-
-
-
-	//cout << benchmarkTrie("corrected_text.txt", file2, dic) << " ns" << endl;
+	vector<Benchmark *> benchmarks;
+	benchmarks.push_back(new TrieBenchmark(5, file2, dic));
+	benchmarks.push_back(new BKTreeBenchmark(5, file2, dic));
+	for (size_t i = 0; i < benchmarks.size(); ++i)
+	{
+		cout << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000) << " seconds." << std::endl;
+		delete benchmarks[i];
+	}
 }
 
 int main(){
