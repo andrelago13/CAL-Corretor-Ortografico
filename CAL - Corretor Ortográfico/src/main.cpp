@@ -59,6 +59,8 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 		closedir (dir);
 	} else {
 		cerr << "Error reading dictionaries folder" << endl;
+		free(dir);
+		free(ent);
 		return NULL;
 	}
 
@@ -66,6 +68,8 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 
 	if(dictionaries.size() == 0) {
 		cout << "No dictionary files were found." << endl;
+		free(dir);
+		free(ent);
 		return NULL;
 	}
 
@@ -101,6 +105,8 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 		cout << "Saved recently processed dictionary" << endl;
 	}
 
+	free(dir);
+	free(ent);
 	return dic;
 }
 
@@ -120,6 +126,8 @@ string choose_file(const string& dirName) {
 		closedir (dir);
 	} else {
 		cerr << "Error reading text files folder" << endl;
+		free(dir);
+		free(ent);
 		return "";
 	}
 
@@ -127,6 +135,8 @@ string choose_file(const string& dirName) {
 
 	if(files.size() == 0) {
 		cout << "No text files were found." << endl;
+		free(dir);
+		free(ent);
 		return "";
 	}
 
@@ -134,9 +144,13 @@ string choose_file(const string& dirName) {
 		cout << "Do you wish to correct file \"" << files[0] << "\" (only one available)?" << endl;
 		if(UserInput::getYesNo()) {
 			file += files[0];
+			free(dir);
+			free(ent);
 			return file;
 		}
 		else {
+			free(dir);
+			free(ent);
 			return "";
 		}
 	}
@@ -148,6 +162,8 @@ string choose_file(const string& dirName) {
 	int option = UserInput::getInt(1, files.size());
 	file += files[option-1];
 	cout << "Chosen file \"" << file << "\"." << endl;
+	free(dir);
+	free(ent);
 	return file;
 }
 
@@ -192,6 +208,8 @@ void run()
 		cout << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000) << " seconds." << std::endl;
 		delete benchmarks[i];
 	}
+	delete(dic);
+	cout << "Terminating" << endl;
 }
 
 int main(){
