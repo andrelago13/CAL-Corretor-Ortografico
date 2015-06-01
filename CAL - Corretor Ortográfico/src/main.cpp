@@ -114,11 +114,10 @@ string choose_file(const string& dirName) {
 				files.push_back(filename);
 			}
 		}
-		closedir (dir);
+		closedir(dir);
 	} else {
 		cerr << "Error reading text files folder" << endl;
-		//free(dir);
-		//free(ent);
+		closedir(dir);
 		return "";
 	}
 
@@ -126,8 +125,7 @@ string choose_file(const string& dirName) {
 
 	if(files.size() == 0) {
 		cout << "No text files were found." << endl;
-		//free(dir);
-		//free(ent);
+		closedir(dir);
 		return "";
 	}
 
@@ -135,13 +133,11 @@ string choose_file(const string& dirName) {
 		cout << "Do you wish to correct file \"" << files[0] << "\" (only one available)?" << endl;
 		if(UserInput::getYesNo()) {
 			file += files[0];
-			//free(dir);
-			//free(ent);
+			closedir(dir);
 			return file;
 		}
 		else {
-			//free(dir);
-			//free(ent);
+			closedir(dir);
 			return "";
 		}
 	}
@@ -153,8 +149,7 @@ string choose_file(const string& dirName) {
 	int option = UserInput::getInt(1, files.size());
 	file += files[option-1];
 	cout << "Chosen file \"" << file << "\"." << endl;
-	//free(dir); // TODO
-	//free(ent);
+	closedir(dir);
 	return file;
 }
 
