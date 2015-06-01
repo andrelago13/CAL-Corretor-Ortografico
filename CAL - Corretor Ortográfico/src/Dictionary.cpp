@@ -14,13 +14,9 @@ void Dictionary::readProcessedDictionary(std::string filename) {
 	int num;
 	string line, word;
 	while(getline(fin, line)){
-		//getline(fin, word);
 		std::stringstream ss(line);
 		ss >> word;
 		ss >> num;
-		//	std::cerr << "read " << word << std::endl;
-		//if(word.size() == 1 && !(word == "a" || word =="A"))
-		//continue;
 		bool found = false;
 		for(size_t i = 0; i < word.size(); i++){
 			if(word[i] != '-' && word[i] != '\'' && !isalpha(word[i])){
@@ -73,7 +69,6 @@ void Dictionary::countWholeWords(std::string& filename) {
 		hash_table::iterator iti;
 		if((iti = entries.find(entry)) != entries.end()){
 			(*iti)->incCount();
-			std::cerr << "found " << word<< std::endl;
 		}
 		delete(entry);
 	}
@@ -110,10 +105,6 @@ DictionaryEntry* Dictionary::findWord(const std::string& word) const{
 	delete entry;
 	if(iti != entries.end()){
 		return *iti;
-	}
-	std::cerr << word << std::endl;
-	if(editDistance(word, "war") == 0){
-		std::cerr << "oops" << std::endl;
 	}
 	return NULL;
 }

@@ -20,14 +20,12 @@ public:
 	Benchmark(const string &name, unsigned times): name(name), times(times) { }
 	virtual std::chrono::nanoseconds::rep run() const
 	{
-		cerr << "Running " << name << " benchmark..." << endl;
 		auto begin = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < times; ++i)
 		{
 			f();
 		}
 		auto end = std::chrono::high_resolution_clock::now();
-		cerr << name << " benchmark finished." << endl;
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count() / times;
 	}
 	virtual ~Benchmark() {};

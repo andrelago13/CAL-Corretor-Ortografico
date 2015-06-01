@@ -37,7 +37,6 @@ struct eqstr {
 };
 
 typedef std::unordered_set<DictionaryEntry *, hstr, eqstr> hash_table;
-//typedef std::set<DictionaryEntry*, DictionaryEntry::EntryComp> hash_table;
 
 class Dictionary{
 	friend class Corrector;
