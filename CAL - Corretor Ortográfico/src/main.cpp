@@ -162,50 +162,35 @@ string choose_file(const string& dirName) {
 void run()
 {
 	Dictionary* dic = choose_read_dictionary(DICTIONARY_DIR);
-
-	//std::cerr << *dic << endl;
 	if(dic == NULL) return;
 
-	//string file = choose_file(TEXT_DIR);	//choose_file(TEXT_DIR);
-	//if(file == "") return;
+	cout << "Do you wish to use the benchmark mode?" << endl;
 
-	//system("pause");
+	if(UserInput::getYesNo()) {
+		string file2 = "samples/errors.txt";
 
-	//string file = "example1.txt";
-	string file2 = "texts/errors.txt";
-	//dic.countWholeWords(file);
+		BKTree bktree = Corrector::fillBK(dic, file2);
 
-	//CorrectedText* corr = Corrector::correctTrie(dic, file2);
-	//	Trie tree =  dic.fillTrie();
+		vector<Benchmark *> benchmarks;
+		benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
+		benchmarks.push_back(new BKTreeFillBenchmark(1, file2, dic));
+		benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, bktree));
 
-	//Corrector::correctTextDynamic(Corrector::CORRECTED_TEXT, file, *dic);
-
-	//tree.print();
-	//dic.debug();
-	//cout << dic << endl;
-	//cout << corr << endl;
-	//dic.writeDictionary("dictionary2.txt");
-	//cout << "Number of nodes: " << TrieNode::id << endl;
-	//cout << "Size of each node: " << sizeof(TrieNode) << endl;
-	//delete corr;
-
-	BKTree bktree = Corrector::fillBK(dic, file2);
-
-	vector<Benchmark *> benchmarks;
-	//benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
-	//benchmarks.push_back(new BKTreeFillBenchmark(1, file2, dic));
-	benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, bktree));
-
-	for (size_t i = 0; i < benchmarks.size(); ++i)
-	{
-		cerr << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000 * 1000) << " seconds." << std::endl;
-		cerr << "delete start" << endl;
-		delete benchmarks[i];
-		cerr << "delete end" << endl;
+		for (size_t i = 0; i < benchmarks.size(); ++i)
+		{
+			cerr << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000 * 1000) << " seconds." << std::endl;
+			cerr << "delete start" << endl;
+			delete benchmarks[i];
+			cerr << "delete end" << endl;
+		}
+	} else {
+		string file = choose_file(TEXT_DIR);
+		if(file == "") return;
+		Corrector::correctTextDynamic(Corrector::CORRECTED_TEXT, file, *dic);
 	}
 
 	delete(dic);
-	cout << "Terminating" << endl;
+	cout << endl << "Terminating" << endl << endl;
 }
 
 int main(){
