@@ -18,7 +18,7 @@
 
 #define DICTIONARY_DIR "dictionaries/"
 #define DICTIONARY_EXT "txt"
-#define TEXT_DIR ""
+#define TEXT_DIR "texts/"
 #define TEXT_EXT "txt"
 
 using namespace std;
@@ -163,7 +163,7 @@ void run()
 	Dictionary* dic = choose_read_dictionary(DICTIONARY_DIR);
 	if(dic == NULL) return;
 
-	string file = choose_file("/");	//choose_file(TEXT_DIR);
+	string file = choose_file(TEXT_DIR);	//choose_file(TEXT_DIR);
 	if(file == "") return;
 
 	system("pause");
