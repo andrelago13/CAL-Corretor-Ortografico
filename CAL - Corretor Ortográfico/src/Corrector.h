@@ -419,7 +419,7 @@ public:
 		while(!fin.eof()){
 			linenum++;
 			getline(fin, line);
-			fout << correctLineDynamic(dic, line, linenum, tree) << std::endl;
+			fout << correctLineDynamic(dic, line, linenum, tree, oldFile) << std::endl;
 		}
 
 		fin.close();
@@ -457,7 +457,7 @@ public:
 
 	}
 
-	static std::string correctLineDynamic(Dictionary& dic, const std::string& line, int linenum, Trie& tree) {
+	static std::string correctLineDynamic(Dictionary& dic, const std::string& line, int linenum, Trie& tree, const std::string oldFile) {
 		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
@@ -478,7 +478,7 @@ public:
 			wordCount++;
 			if(dic.findWord(token) == NULL){
 				errorCount++;
-				result += correctWordDynamic(dic, token, wordCount, tree) + " ";
+				result += correctWordDynamic(dic, token, wordCount, tree, oldFile) + " ";
 			}
 			else
 				result += token + " ";
@@ -487,7 +487,7 @@ public:
 		return result;
 	}
 
-	static std::string correctWordDynamic(Dictionary& dic, std::string& word, int wordnum,  Trie& tree) {
+	static std::string correctWordDynamic(Dictionary& dic, std::string& word, int wordnum,  Trie& tree, const std::string oldFile) {
 
 		string newWord = word;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
@@ -524,7 +524,7 @@ public:
 
 			if(option == 0)
 			{
-				// TODO add word to dictionary
+				dic.addEntry(word, oldFile);
 				return word;
 			}
 
@@ -537,8 +537,10 @@ public:
 		{
 			cout << "No words were found similar to " << word << ". Would you like to add it to the dictionary?" << std::endl;
 
-			//TODO Get yes_no from user
-			//TODO If yes, replace by new word
+			if(UserInput::getYesNo()) {
+				dic.addEntry(word, oldFile);
+				return newWord;
+			}
 
 			return newWord;
 		}

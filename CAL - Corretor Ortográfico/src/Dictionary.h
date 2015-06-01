@@ -46,6 +46,8 @@ private:
 public:
 	void writeDictionary(std::string filename);
 	void countWholeWords(std::string& filename);
+	void addEntry(const std::string& filename, const std::string& word);
+	int wordCount(const std::string& filename, const std::string& word);
 	DictionaryEntry* findWord(const std::string& word);
 	Dictionary(std::string filename, bool isProcessed);
 

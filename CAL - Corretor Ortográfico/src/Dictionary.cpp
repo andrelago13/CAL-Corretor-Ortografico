@@ -80,6 +80,28 @@ void Dictionary::countWholeWords(std::string& filename) {
 	}
 	fin.close();
 }
+
+void Dictionary::addEntry(const std::string& filename, const std::string& word) {
+	DictionaryEntry* entry = new DictionaryEntry(word);
+	entry->setCount(wordCount(filename, word));
+	entries.insert(entry);
+}
+
+int Dictionary::wordCount(const std::string& filename, const std::string& word) {
+	int count = 0;
+	std::ifstream fin(filename.c_str());
+	if(!fin.is_open())
+		throw new DictionaryException("Invalid file name");
+	std::string textWord;
+	while(!fin.eof()){
+		fin >> textWord;
+		if(textWord == word)
+			count++;
+	}
+	fin.close();
+	return count;
+}
+
 DictionaryEntry* Dictionary::findWord(const std::string& word) {
 	hash_table::iterator iti;
 	DictionaryEntry* entry = new DictionaryEntry(word);
