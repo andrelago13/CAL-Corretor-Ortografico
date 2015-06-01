@@ -53,7 +53,7 @@ public:
 class CorrectedWord{
 public:
 	static size_t MAX_SUGGESTIONS;
-	int wordNum;
+	unsigned wordNum;
 	std::string word;
 	std::set<WordMatch*, WordMatch::MatchComp> matches;
 	CorrectedWord(std::string word,int wordNum ): wordNum(wordNum), word(word){};
@@ -367,11 +367,9 @@ public:
 	}
 	static CorrectedLine* correctLineTrie(Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
 		//std::cerr << "correcting Line" << std::endl;
-		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
 		CorrectedLine* out = NULL;
-		int errorCount = 0;
 		while(getline(iss, token, ' '))
 		{
 			// TODO change way string is "run" to include commas
@@ -463,7 +461,6 @@ public:
 		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
-		CorrectedLine* out = NULL;
 		int errorCount = 0;
 
 		std::string result = "";
