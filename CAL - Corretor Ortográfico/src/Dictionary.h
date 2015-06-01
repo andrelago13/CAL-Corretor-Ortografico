@@ -31,7 +31,6 @@ struct hstr {
 
 struct eqstr {
 	bool operator() ( const DictionaryEntry *entry1, const DictionaryEntry *entry2) const {
-		return false;
 		return *entry1 == *entry2;
 	}
 };
