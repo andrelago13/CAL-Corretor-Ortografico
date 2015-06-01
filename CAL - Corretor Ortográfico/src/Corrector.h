@@ -196,7 +196,7 @@ public:
 		}
 	}
 	friend std::ostream& operator<<(std::ostream& os, CorrectedText* cw){
-		os << "Text Corrections: " << std::endl;
+		os << "Text Corrections (" << cw->textCorrections.size() << "): " << std::endl;
 		std::vector<CorrectedLine*>::iterator iti = cw->textCorrections.begin();
 		std::vector<CorrectedLine*>::iterator ite = cw->textCorrections.end();
 		int num = 0;
@@ -363,7 +363,6 @@ public:
 			linenum++;
 			getline(fin, line);
 			out->addCorrection(correctLineTrie(dic, line, linenum, tree));
-			//cout << out << endl;
 		}
 		fin.close();
 		std::cerr << "done correcting text" << std::endl;
@@ -371,9 +370,11 @@ public:
 	}
 	static CorrectedLine* correctLineTrie(Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
 		//std::cerr << "correcting Line" << std::endl;
+		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
 		CorrectedLine* out = NULL;
+		int errorCount = 0;
 		while(getline(iss, token, ' '))
 		{
 			// TODO change way string is "run" to include commas
@@ -381,6 +382,16 @@ public:
 			for(i = token.length(); i >= 0; i-- ){
 				if(isalpha(token[i]))
 					break;
+			}
+			token = token.substr(0,i+1);
+			if(token.length() == 0 )
+				continue;
+			wordCount++;
+			if(dic.findWord(token) == NULL){
+				errorCount++;
+				if(out == NULL)
+					out = new CorrectedLine(linenum);
+				out->addCorrection(correctWordTrie(dic, token,wordCount, tree));
 			}
 		}
 		//std::cerr << "done correcting Line" << std::endl;
