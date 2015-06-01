@@ -21,9 +21,6 @@
 #define TEXT_DIR ""
 #define TEXT_EXT "txt"
 
-#define GetCurrentDir _getcwd
-char cCurrentPath[FILENAME_MAX];
-
 using namespace std;
 
 bool file_exists(const string& filename) {
@@ -166,12 +163,7 @@ void run()
 	Dictionary* dic = choose_read_dictionary(DICTIONARY_DIR);
 	if(dic == NULL) return;
 
-	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
-	{
-		return;
-	}
-
-	string file = choose_file(cCurrentPath);	//choose_file(TEXT_DIR);
+	string file = choose_file("/");	//choose_file(TEXT_DIR);
 	if(file == "") return;
 
 	system("pause");
