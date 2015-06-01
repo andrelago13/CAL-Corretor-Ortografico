@@ -88,17 +88,22 @@ void Dictionary::addEntry(const std::string& filename, const std::string& word) 
 }
 
 int Dictionary::wordCount(const std::string& filename, const std::string& word) {
+	std::cerr << "counting " << filename << std::endl;
 	int count = 0;
 	std::ifstream fin(filename.c_str());
-	if(!fin.is_open())
+	if(!fin.is_open()) {
+		std::cerr << "problems" << std::endl;
 		throw new DictionaryException("Invalid file name");
-	std::string textWord;
+	}
+	std::string textWord = "";
+	std::cerr << "file open" << std::endl;
 	while(!fin.eof()){
 		fin >> textWord;
 		if(textWord == word)
-			count++;
+			++count;
 	}
 	fin.close();
+	std::cerr << "returning" << std::endl;
 	return count;
 }
 

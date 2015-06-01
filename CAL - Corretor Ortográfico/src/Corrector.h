@@ -524,7 +524,7 @@ public:
 
 			if(option == 0)
 			{
-				dic.addEntry(word, oldFile);
+				dic.addEntry(oldFile, word);
 				return word;
 			}
 
@@ -538,7 +538,7 @@ public:
 			cout << "No words were found similar to " << word << ". Would you like to add it to the dictionary?" << std::endl;
 
 			if(UserInput::getYesNo()) {
-				dic.addEntry(word, oldFile);
+				dic.addEntry(oldFile, word);
 				return newWord;
 			}
 
