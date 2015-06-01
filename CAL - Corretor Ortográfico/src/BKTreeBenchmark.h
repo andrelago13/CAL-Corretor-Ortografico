@@ -14,13 +14,13 @@ class BKTreeBenchmark: public Benchmark {
 private:
 	const std::string &oldFile;
 	Dictionary &dic;
-	void f()
+	void f() const
 	{
 		Corrector::correctBK(dic, oldFile);
 	}
 public:
-	BKTreeBenchmark(const std::string &oldFile, Dictionary &dic);
-	virtual ~BKTreeBenchmark();
+	BKTreeBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic): Benchmark("BK Tree", times), oldFile(oldFile), dic(dic) { }
+	virtual ~BKTreeBenchmark() {};
 };
 
 #endif /* SRC_BKTREEBENCHMARK_H_ */

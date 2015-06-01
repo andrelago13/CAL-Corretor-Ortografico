@@ -12,10 +12,13 @@
 
 class Benchmark {
 private:
+	unsigned times;
+protected:
 	virtual void f() const = 0;
 public:
-	Benchmark();
-	virtual std::chrono::nanoseconds run(unsigned times)
+	const string name;
+	Benchmark(const string &name, unsigned times): name(name), times(times) { }
+	virtual std::chrono::nanoseconds::rep run() const
 	{
 		auto begin = std::chrono::high_resolution_clock::now();
 		for (size_t i = 0; i < times; ++i)
@@ -25,7 +28,7 @@ public:
 		auto end = std::chrono::high_resolution_clock::now();
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count() / times;
 	}
-	virtual ~Benchmark();
+	virtual ~Benchmark() {};
 };
 
 #endif /* SRC_BENCHMARK_H_ */
