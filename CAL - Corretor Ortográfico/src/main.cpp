@@ -10,6 +10,10 @@
 #include "Dictionary.h"
 #include "Corrector.h"
 #include "Trie.h"
+#include "Benchmark.h"
+#include "TrieBenchmark.h"
+#include "BKTreeBenchmark.h"
+#include <chrono>
 
 #define DICTIONARY_DIR "dictionaries/"
 #define DICTIONARY_EXT "txt"
@@ -80,7 +84,7 @@ string choose_dictionary(const string& dirName) {
 	return dictionary;
 }
 
-void useless_function()
+void run()
 {
 	string dictionary = choose_dictionary(DICTIONARY_DIR);
 	if(dictionary == "") return;
@@ -107,10 +111,18 @@ void useless_function()
 	cout << "Number of nodes: " << TrieNode::id << endl;
 	cout << "Size of each node: " << sizeof(TrieNode) << endl;
 	//delete corr;
+
+	vector<Benchmark *> benchmarks;
+	benchmarks.push_back(new TrieBenchmark(5, file2, dic));
+	benchmarks.push_back(new BKTreeBenchmark(5, file2, dic));
+	for (size_t i = 0; i < benchmarks.size(); ++i)
+	{
+		cout << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000) << " seconds." << std::endl;
+		delete benchmarks[i];
+	}
 }
 
 int main(){
-	useless_function();
-
+	run();
 	return 0;
 }
