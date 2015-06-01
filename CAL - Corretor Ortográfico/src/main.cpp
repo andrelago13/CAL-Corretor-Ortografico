@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <dirent.h>
+#include <stdio.h>
 #include "Dictionary.h"
 #include "Corrector.h"
 #include "Trie.h"
@@ -17,6 +18,17 @@
 
 #define DICTIONARY_DIR "dictionaries/"
 #define DICTIONARY_EXT "txt"
+#define TEXT_DIR ""
+#define TEXT_EXT "txt"
+
+#ifdef WINDOWS
+	#include <direct.h>
+	#define GetCurrentDir _getcwd
+#else
+	#include <unistd.h>
+	#define GetCurrentDir getcwd
+#endif
+	char cCurrentPath[FILENAME_MAX];
 
 using namespace std;
 
@@ -87,21 +99,76 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 	return dic;
 }
 
+string choose_file(const string& dirName) {
+	DIR *dir;
+	struct dirent *ent;
+	vector<string> files;
+	if ((dir = opendir (dirName.c_str())) != NULL) {
+
+		while ((ent = readdir (dir)) != NULL) {
+
+			string filename = ent->d_name;
+			if(ent->d_type == DT_REG && (filename.substr(filename.find_last_of(".") + 1) == TEXT_EXT) && filename != Corrector::CORRECTED_TEXT) {
+				files.push_back(filename);
+			}
+		}
+		closedir (dir);
+	} else {
+		cerr << "Error reading text files folder" << endl;
+		return "";
+	}
+
+	string file = TEXT_DIR;
+
+	if(files.size() == 0) {
+		cout << "No text files were found." << endl;
+		return "";
+	}
+
+	if(files.size() == 1) {
+		cout << "Do you wish to correct file \"" << files[0] << "\" (only one available)?" << endl;
+		if(UserInput::getYesNo()) {
+			file += files[0];
+			return file;
+		}
+		else {
+			return "";
+		}
+	}
+
+	cout << "Please select a text file:" << endl;
+	for(size_t i = 0; i < files.size(); i++) {
+		cout << i+1 << " - " << files[i] << endl;
+	}
+	int option = UserInput::getInt(1, files.size());
+	file += files[option-1];
+	cout << "Chosen file \"" << file << "\"." << endl;
+	return file;
+}
+
 void run()
 {
 	Dictionary* dic = choose_read_dictionary(DICTIONARY_DIR);
 	if(dic == NULL) return;
 
+	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+	{
+		return;
+	}
+
+	string file = choose_file(cCurrentPath);	//choose_file(TEXT_DIR);
+	if(file == "") return;
+
 	system("pause");
 
-	string file = "example1.txt";
+	//string file = "example1.txt";
 	string file2 = "errors.txt";
 	//dic.countWholeWords(file);
 
 	//CorrectedText* corr = Corrector::correctTrie(dic, file2);
 	//	Trie tree =  dic.fillTrie();
 
-	Corrector::correctTextDynamic("corrected_text.txt", file2, *dic);
+	Corrector::correctTextDynamic(Corrector::CORRECTED_TEXT, file, *dic);
 
 	//tree.print();
 	//dic.debug();

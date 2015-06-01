@@ -9,7 +9,4 @@
 #define SRC_CORRECTOR_CPP_
 
 
-
-
-
 #endif /* SRC_CORRECTOR_CPP_ */

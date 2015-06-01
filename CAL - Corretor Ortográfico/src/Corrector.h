@@ -22,7 +22,6 @@
 #include "UserInput.h"
 #include <iostream>
 
-
 class WordMatch{
 	DictionaryEntry* entry;
 	int distance;
@@ -210,6 +209,7 @@ public:
 
 class Corrector{
 public:
+	static const string CORRECTED_TEXT;
 	//TODO make CorrectorException and DictionaryException inherit from base class
 	class CorrectorException{
 		std::string message;
@@ -544,6 +544,7 @@ public:
 	}
 };
 
+const string Corrector::CORRECTED_TEXT = "corrected_text.txt";
 
 
 #endif /* SRC_CORRECTOR_H_ */
