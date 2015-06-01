@@ -8,7 +8,8 @@
 #ifndef SRC_MATCHER_H_
 #define SRC_MATCHER_H_
 
-
+#include <string>
+#include <vector>
 
 int numStringMatching(std::string filename, std::string toSearch);
 float numApproximateStringMatching(std::string filename, std::string toSearch);
