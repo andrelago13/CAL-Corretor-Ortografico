@@ -470,7 +470,9 @@ public:
 		for(size_t i = 0 ; i < found.size(); i++){
 			DictionaryEntry* temp = dic.findWord(found[i]->getWord());
 			if(temp != NULL)
+			{
 				out->addCorrection(temp);
+			}
 		}
 
 		if(!found.empty())
