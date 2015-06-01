@@ -9,10 +9,11 @@
 #include "Dictionary.h"
 #include "Corrector.h"
 #include "Trie.h"
+#include "Benchmark.h"
 
 using namespace std;
 
-void useless_function()
+void run()
 {
 	cout << "Reading dictionary" << endl;
 	Dictionary dic("dictionary2.txt", true);
@@ -34,10 +35,15 @@ void useless_function()
 	cout << "Number of nodes: " << TrieNode::id << endl;
 	cout << "Size of each node: " << sizeof(TrieNode) << endl;
 	//delete corr;
+
+
+
+
+
+	//cout << benchmarkTrie("corrected_text.txt", file2, dic) << " ns" << endl;
 }
 
 int main(){
-	useless_function();
-
+	run();
 	return 0;
 }
