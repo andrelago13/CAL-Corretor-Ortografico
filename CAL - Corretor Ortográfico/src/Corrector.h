@@ -22,7 +22,6 @@
 #include "UserInput.h"
 #include <iostream>
 
-
 class WordMatch{
 	DictionaryEntry* entry;
 	int distance;
@@ -118,9 +117,6 @@ public:
 		cout << "Word Number " << wordNum << ": " << word << std::endl
 				<< "No words were found similar to " << word << ". Would you like to replace it? (Y/N)" << std::endl;
 
-		//TODO Get yes_no from user
-		//TODO If yes, replace by new word
-
 		system("pause");
 		return word;
 	}
@@ -213,6 +209,7 @@ public:
 
 class Corrector{
 public:
+	static const string CORRECTED_TEXT;
 	//TODO make CorrectorException and DictionaryException inherit from base class
 	class CorrectorException{
 		std::string message;
@@ -493,7 +490,7 @@ public:
 			wordCount++;
 			if(dic.findWord(token) == NULL){
 				errorCount++;
-				result += correctWordDynamic(dic, token, wordCount, tree, oldFile) + " ";
+				result += correctWordDynamic(dic, token, linenum, wordCount, tree, oldFile) + " ";
 			}
 			else
 				result += token + " ";
@@ -502,14 +499,14 @@ public:
 		return result;
 	}
 
-	static std::string correctWordDynamic(Dictionary& dic, std::string& word, int wordnum,  Trie& tree, const std::string oldFile) {
+	static std::string correctWordDynamic(Dictionary& dic, std::string& word, int linenum, int wordnum,  Trie& tree, const std::string oldFile) {
 
 		string newWord = word;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		int maxDist = 2;
 		std::vector<DictionaryEntry*> found = tree.query(word, maxDist);
 
-		cout << "Word Number " << wordnum << ": " << word << std::endl << "Suggestions:" << std::endl;
+		std::cout << "Line " << linenum << ", Word " << wordnum << ": " << word << std::endl << "Suggestions:" << std::endl;
 		cout << "0 - Add \"" << word << "\" to dictionary" << std::endl;
 
 		while(++maxDist <= 6 && found.size() <= 0)
@@ -539,7 +536,7 @@ public:
 
 			if(option == 0)
 			{
-				dic.addEntry(word, oldFile);
+				dic.addEntry(oldFile, word);
 				return word;
 			}
 
@@ -553,7 +550,7 @@ public:
 			cout << "No words were found similar to " << word << ". Would you like to add it to the dictionary?" << std::endl;
 
 			if(UserInput::getYesNo()) {
-				dic.addEntry(word, oldFile);
+				dic.addEntry(oldFile, word);
 				return newWord;
 			}
 
@@ -562,6 +559,7 @@ public:
 	}
 };
 
+const string Corrector::CORRECTED_TEXT = "corrected_text.txt";
 
 
 #endif /* SRC_CORRECTOR_H_ */
