@@ -275,7 +275,7 @@ public:
 		hash_table::iterator iti = dic.entries.begin();
 		hash_table::iterator ite = dic.entries.end();
 		for(; iti != ite; ++iti){
-			if(correctorValidation(word, (*iti)->getWord())){
+			if(correctorValidation(word, (*iti)->getWord())){\
 				(*iti)->calculateEditDistance(word);
 				out->addCorrection(*iti);
 			}
@@ -284,9 +284,9 @@ public:
 		return out;
 	}
 
-	static BKTree fillBK(Dictionary& dic, std::string filename){
+	static BKTree fillBK(Dictionary *dic, std::string filename){
 		std::cerr << "filling tree" << std::endl;
-		BKTree tree = dic.fillBKTree();
+		BKTree tree = dic->fillBKTree();
 		std::cerr << "done filling tree" << std::endl;
 		return tree;
 	}
@@ -300,7 +300,6 @@ public:
 		while(!fin.eof()){
 			linenum++;
 			getline(fin, line);
-			correctLineBK(dic, line, linenum,tree);
 			out->addCorrection(correctLineBK(dic, line, linenum, tree));
 		}
 		fin.close();
@@ -374,8 +373,10 @@ public:
 		std::string token;
 		CorrectedLine* out = NULL;
 		int errorCount = 0;
+		bool in = false;
 		while(getline(iss, token, ' '))
 		{
+			in = true;
 			// TODO change way string is "run" to include commas
 			unsigned int i;
 			for(i = token.length(); i >= 0; i-- ){

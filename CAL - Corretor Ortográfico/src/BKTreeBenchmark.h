@@ -13,27 +13,27 @@
 class BKTreeFillBenchmark: public Benchmark {
 private:
 	const std::string &oldFile;
-	Dictionary &dic;
+	Dictionary *dic;
 	void f() const
 	{
 		Corrector::fillBK(dic, oldFile);
 	}
 public:
-	BKTreeFillBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic): Benchmark("Filling BK Tree", times), oldFile(oldFile), dic(dic) { }
+	BKTreeFillBenchmark(unsigned times, const std::string &oldFile, Dictionary *dic): Benchmark("Filling BK Tree", times), oldFile(oldFile), dic(dic) { }
 	virtual ~BKTreeFillBenchmark() {};
 };
 
 class BKTreeCorrectBenchmark: public Benchmark {
 private:
 	const std::string &oldFile;
-	Dictionary &dic;
-	const BKTree tree;
+	Dictionary *dic;
+	const BKTree &tree;
 	void f() const
 	{
-		Corrector::correctBK(tree, dic, oldFile);
+		Corrector::correctBK(tree, *dic, oldFile);
 	}
 public:
-	BKTreeCorrectBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic, const BKTree &tree): Benchmark("Correcting using BK Tree", times), oldFile(oldFile), dic(dic), tree(tree) { }
+	BKTreeCorrectBenchmark(unsigned times, const std::string &oldFile, Dictionary *dic, const BKTree &tree): Benchmark("Correcting using BK Tree", times), oldFile(oldFile), dic(dic), tree(tree) { }
 	virtual ~BKTreeCorrectBenchmark() {};
 };
 

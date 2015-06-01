@@ -50,8 +50,8 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 		closedir (dir);
 	} else {
 		cerr << "Error reading dictionaries folder" << endl;
-		free(dir);
-		free(ent);
+		//free(dir);
+		//free(ent);
 		return NULL;
 	}
 
@@ -59,8 +59,8 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 
 	if(dictionaries.size() == 0) {
 		cout << "No dictionary files were found." << endl;
-		free(dir);
-		free(ent);
+		//free(dir);
+		//free(ent);
 		return NULL;
 	}
 
@@ -96,8 +96,9 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 		cout << "Saved recently processed dictionary" << endl;
 	}
 
-	free(dir);
-	free(ent);
+	//free(dir);
+	//free(ent);
+	std::cerr << *dic << endl;
 	return dic;
 }
 
@@ -117,8 +118,8 @@ string choose_file(const string& dirName) {
 		closedir (dir);
 	} else {
 		cerr << "Error reading text files folder" << endl;
-		free(dir);
-		free(ent);
+		//free(dir);
+		//free(ent);
 		return "";
 	}
 
@@ -126,8 +127,8 @@ string choose_file(const string& dirName) {
 
 	if(files.size() == 0) {
 		cout << "No text files were found." << endl;
-		free(dir);
-		free(ent);
+		//free(dir);
+		//free(ent);
 		return "";
 	}
 
@@ -135,13 +136,13 @@ string choose_file(const string& dirName) {
 		cout << "Do you wish to correct file \"" << files[0] << "\" (only one available)?" << endl;
 		if(UserInput::getYesNo()) {
 			file += files[0];
-			free(dir);
-			free(ent);
+			//free(dir);
+			//free(ent);
 			return file;
 		}
 		else {
-			free(dir);
-			free(ent);
+			//free(dir);
+			//free(ent);
 			return "";
 		}
 	}
@@ -153,14 +154,16 @@ string choose_file(const string& dirName) {
 	int option = UserInput::getInt(1, files.size());
 	file += files[option-1];
 	cout << "Chosen file \"" << file << "\"." << endl;
-	free(dir);
-	free(ent);
+	//free(dir); // TODO
+	//free(ent);
 	return file;
 }
 
 void run()
 {
 	Dictionary* dic = choose_read_dictionary(DICTIONARY_DIR);
+
+	//std::cerr << *dic << endl;
 	if(dic == NULL) return;
 
 	//string file = choose_file(TEXT_DIR);	//choose_file(TEXT_DIR);
@@ -185,11 +188,13 @@ void run()
 	//cout << "Number of nodes: " << TrieNode::id << endl;
 	//cout << "Size of each node: " << sizeof(TrieNode) << endl;
 	//delete corr;
-/*
+
+	BKTree bktree = Corrector::fillBK(dic, file2);
+
 	vector<Benchmark *> benchmarks;
-	benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
+	//benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
 	//benchmarks.push_back(new BKTreeFillBenchmark(1, file2, dic));
-	//benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, Corrector::fillBK(dic, file2)));
+	benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, bktree));
 
 	for (size_t i = 0; i < benchmarks.size(); ++i)
 	{
@@ -197,10 +202,7 @@ void run()
 		cerr << "delete start" << endl;
 		delete benchmarks[i];
 		cerr << "delete end" << endl;
-	}*/
-
-	while (1)
-		Corrector::correctTrie(*dic, file2);
+	}
 
 	delete(dic);
 	cout << "Terminating" << endl;

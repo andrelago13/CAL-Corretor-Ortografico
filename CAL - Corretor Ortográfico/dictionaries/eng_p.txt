@@ -1936,8 +1936,8 @@ Boers 0
 Boethius 0
 Bogart 0
 Bogart's 0
-Bogotá 0
-Bogotá's 0
+Bogota 0
+Bogota's 0
 Bohemia 0
 Bohemian 0
 Bohemian's 0
@@ -4477,7 +4477,7 @@ Dutchman's 0
 Dutchmen 0
 Duvalier 0
 Dvina 0
-Dvorák 0
+Dvorak 0
 Dwayne 0
 Dwayne's 0
 Dwight 0
@@ -4937,8 +4937,8 @@ Estelle 0
 Estelle's 0
 Ester 0
 Ester's 0
-Esterházy 0
-Esterházy's 0
+Esterhazy 0
+Esterhazy's 0
 Estes 0
 Esther 0
 Esther's 0
@@ -11585,8 +11585,8 @@ Paramaribo 0
 Paramaribo's 0
 Paramount 0
 Paramount's 0
-Paraná 0
-Paraná's 0
+Parana 0
+Parana's 0
 Parcheesi 0
 Parcheesi's 0
 Pareto 0
@@ -15499,9 +15499,9 @@ Velma 0
 Velma's 0
 Velveeta 0
 Velveeta's 0
-Velásquez 0
-Velásquez's 0
-Velázquez 0
+Velasquez 0
+Velasquez's 0
+Velazquez 0
 Venetian 0
 Venetian's 0
 Venetians 0
@@ -99108,7 +99108,6 @@ zygotes 0
 éclairs 0
 éclat 0
 éclat's 0
-
 élan 0
 élan's 0
 émigré 0

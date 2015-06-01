@@ -36,7 +36,7 @@ public:
 	bool operator==(const DictionaryEntry &entry) const;
 	friend std::ostream& operator <<(std::ostream& os, DictionaryEntry dic);
 	struct EntryComp{
-		bool operator()( DictionaryEntry * e1,  DictionaryEntry* e2){
+		bool operator()( DictionaryEntry * e1,  DictionaryEntry* e2) const {
 			return *e1 < *e2;
 		}
 	};

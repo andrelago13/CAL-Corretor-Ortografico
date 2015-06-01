@@ -35,6 +35,8 @@ public:
 		else children[dist]->insertEntry(newEntry);
 	}
 	void query(vector<DictionaryEntry*>& output, const string& word, int maxdist) const{
+		if (entry == NULL)
+			exit(1);
 		int dist = editDistance(word, entry->getWord());
 		if(dist <= maxdist){
 			entry->setLastEditDistance(dist);
@@ -49,7 +51,9 @@ public:
 		int end = min( (int)children.size()-1,  dist + maxdist);
 		for(int i = beginning; i <= end; i++){
 			if(children[i] != NULL)
+			{
 				children[i]->query(output, word, maxdist);
+			}
 		}
 	}
 	~BKTreeNode(){

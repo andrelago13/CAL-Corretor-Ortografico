@@ -11,14 +11,13 @@ void Dictionary::readProcessedDictionary(std::string filename) {
 	std::ifstream fin(filename.c_str());
 	if(!fin.is_open())
 		throw DictionaryException("Invalid file name");
-	std::string word;
 	int num;
-	//std::stringstream ss;
-	while(!fin.eof()){
+	string line, word;
+	while(getline(fin, line)){
 		//getline(fin, word);
-		//std::stringstream ss(word);
-		fin >> word;
-		fin >> num;
+		std::stringstream ss(line);
+		ss >> word;
+		ss >> num;
 		//	std::cerr << "read " << word << std::endl;
 		//if(word.size() == 1 && !(word == "a" || word =="A"))
 		//continue;
@@ -161,7 +160,6 @@ Trie Dictionary::fillTrie(){
 		count++;
 		out.insertEntry(*iti, (*iti)->getWord());
 	}
-	cerr << "count: " << count << endl;
 	return out;
 }
 
