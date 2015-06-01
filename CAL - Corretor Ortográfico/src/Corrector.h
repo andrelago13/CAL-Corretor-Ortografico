@@ -118,9 +118,6 @@ public:
 		cout << "Word Number " << wordNum << ": " << word << std::endl
 				<< "No words were found similar to " << word << ". Would you like to replace it? (Y/N)" << std::endl;
 
-		//TODO Get yes_no from user
-		//TODO If yes, replace by new word
-
 		system("pause");
 		return word;
 	}
@@ -478,7 +475,7 @@ public:
 			wordCount++;
 			if(dic.findWord(token) == NULL){
 				errorCount++;
-				result += correctWordDynamic(dic, token, wordCount, tree, oldFile) + " ";
+				result += correctWordDynamic(dic, token, linenum, wordCount, tree, oldFile) + " ";
 			}
 			else
 				result += token + " ";
@@ -487,14 +484,14 @@ public:
 		return result;
 	}
 
-	static std::string correctWordDynamic(Dictionary& dic, std::string& word, int wordnum,  Trie& tree, const std::string oldFile) {
+	static std::string correctWordDynamic(Dictionary& dic, std::string& word, int linenum, int wordnum,  Trie& tree, const std::string oldFile) {
 
 		string newWord = word;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		int maxDist = 2;
 		std::vector<DictionaryEntry*> found = tree.query(word, maxDist);
 
-		cout << "Word Number " << wordnum << ": " << word << std::endl << "Suggestions:" << std::endl;
+		std::cout << "Line " << linenum << ", Word " << wordnum << ": " << word << std::endl << "Suggestions:" << std::endl;
 		cout << "0 - Add \"" << word << "\" to dictionary" << std::endl;
 
 		while(++maxDist <= 6 && found.size() <= 0)

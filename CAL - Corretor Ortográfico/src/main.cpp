@@ -15,7 +15,7 @@ using namespace std;
 void useless_function()
 {
 	cout << "Reading dictionary" << endl;
-	Dictionary dic("dictionary2.txt", true);
+	Dictionary dic("dictionaries/dictionary2.txt", true);
 	cout << "Done Reading dictionary" << endl;
 	string file = "example1.txt";
 	string file2 = "errors.txt";
