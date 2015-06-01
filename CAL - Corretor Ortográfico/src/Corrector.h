@@ -116,7 +116,7 @@ public:
 		}
 
 		cout << "Word Number " << wordNum << ": " << word << std::endl
-				<< "No words were found similar to " << word << ". Would you like to replace it? (Y\N)" << std::endl;
+				<< "No words were found similar to " << word << ". Would you like to replace it? (Y/N)" << std::endl;
 
 		//TODO Get yes_no from user
 		//TODO If yes, replace by new word
