@@ -200,7 +200,6 @@ public:
 			std::cerr <<  cw->textCorrections.size() << ", "  << ++num<<std::endl;
 			os  << *iti;
 		}
-		std::cerr <<"ok "<<std::endl;
 		return os;
 	}
 };
@@ -223,7 +222,6 @@ public:
 	};
 
 	static CorrectedText* correct(Dictionary& dic, std::string filename){
-		//std::cerr << "correcting text" << std::endl;
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
 			throw new CorrectorException( "could not open " + filename);
@@ -236,12 +234,10 @@ public:
 			out->addCorrection(correctLine(dic, line, linenum));
 		}
 		fin.close();
-		//std::cerr << "done correcting text" << std::endl;
 		return out;
 	}
 
 	static CorrectedLine* correctLine(Dictionary& dic, const std::string& line, int linenum){
-		//std::cerr << "correcting Line" << std::endl;
 		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
@@ -265,12 +261,10 @@ public:
 				out->addCorrection(correctWord(dic, token,wordCount));
 			}
 		}
-		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
 
 	static CorrectedWord* correctWord(Dictionary& dic, std::string& word, int wordnum){
-		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		hash_table::iterator iti = dic.entries.begin();
 		hash_table::iterator ite = dic.entries.end();
@@ -280,15 +274,11 @@ public:
 				out->addCorrection(*iti);
 			}
 		}
-		//std::cerr << "done correcting word" << std::endl;
 		return out;
 	}
 
 	static BKTree fillBK(Dictionary *dic, std::string filename){
-		std::cerr << "filling tree" << std::endl;
-		BKTree tree = dic->fillBKTree();
-		std::cerr << "done filling tree" << std::endl;
-		return tree;
+		return dic->fillBKTree();
 	}
 	static CorrectedText* correctBK(const BKTree &tree, Dictionary& dic, std::string filename){
 		std::ifstream fin(filename.c_str());
@@ -303,11 +293,9 @@ public:
 			out->addCorrection(correctLineBK(dic, line, linenum, tree));
 		}
 		fin.close();
-		//std::cerr << "done correcting text" << std::endl;
 		return out;
 	}
 	static CorrectedLine* correctLineBK(Dictionary& dic, const std::string& line, int linenum, const BKTree& tree){
-		//std::cerr << "correcting Line" << std::endl;
 		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
@@ -331,24 +319,23 @@ public:
 				out->addCorrection(correctWordBK(dic, token,wordCount, tree));
 			}
 		}
-		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
 	static CorrectedWord* correctWordBK(Dictionary& dic, std::string& word, int wordnum,  const BKTree& tree){
-		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		std::vector<DictionaryEntry*> found = tree.query(word, 2);
 		for(size_t i = 0 ; i < found.size(); i++){
 			out->addCorrection(found[i]);
 		}
-		//std::cerr << "done correcting word" << std::endl;
 		return out;
 	}
 
-	static CorrectedText* correctTrie(Dictionary& dic, std::string filename){
-		std::cerr << "filling tree" << std::endl;
-		Trie tree = dic.fillTrie();
-		std::cerr << "done filling tree" << std::endl;
+	static Trie fillTrie(Dictionary *dic)
+	{
+		return dic->fillTrie();
+	}
+
+	static CorrectedText* correctTrie(const Trie &tree, Dictionary& dic, std::string filename){
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
 		{
@@ -363,20 +350,16 @@ public:
 			out->addCorrection(correctLineTrie(dic, line, linenum, tree));
 		}
 		fin.close();
-		std::cerr << "done correcting text" << std::endl;
 		return out;
 	}
 	static CorrectedLine* correctLineTrie(const Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
-		//std::cerr << "correcting Line" << std::endl;
 		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
 		CorrectedLine* out = NULL;
 		int errorCount = 0;
-		bool in = false;
 		while(getline(iss, token, ' '))
 		{
-			in = true;
 			// TODO change way string is "run" to include commas
 			unsigned int i;
 			for(i = token.length(); i >= 0; i-- ){
@@ -394,11 +377,9 @@ public:
 				out->addCorrection(correctWordTrie(dic, token,wordCount, tree));
 			}
 		}
-		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
 	static CorrectedWord* correctWordTrie(const Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
-		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		std::vector<DictionaryEntry*> found = tree.query(word, 2);
 		for(size_t i = 0 ; i < found.size(); i++){
@@ -406,7 +387,6 @@ public:
 			if(temp != NULL)
 				out->addCorrection(temp);
 		}
-		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
 
@@ -439,37 +419,6 @@ public:
 
 		fin.close();
 		fout.close();
-		std::cerr << "done correcting text" << std::endl;
-
-		/*ofstream corrected_file(newFile.c_str());
-		ifstream original_file(oldFile.c_str());
-
-		vector<CorrectedLine*> lines = ct->textCorrections;
-		size_t line_no = 0;
-		string temp = "";
-
-		for(size_t i = 0; i < lines.size(); i++)
-		{
-			while(++line_no < lines[i]->line)
-			{
-				getline(original_file, temp);
-				cout << "line==> " << temp;
-				corrected_file << temp << std::endl;
-			}
-
-			getline(original_file, temp);
-			cout << "line==> " << temp;
-			temp = lines[i]->correct(temp);
-			temp += '\n';
-			corrected_file << temp;
-		}
-
-		while(!original_file.eof())
-		{
-			getline(original_file, temp);
-			corrected_file << temp << std::endl;
-		}*/
-
 	}
 
 	static std::string correctLineDynamic(Dictionary& dic, const std::string& line, int linenum, Trie& tree, const std::string oldFile) {

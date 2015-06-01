@@ -12,7 +12,7 @@
 #include "Corrector.h"
 #include "Trie.h"
 #include "Benchmark.h"
-#include "TrieCorrectBenchmark.h"
+#include "TrieBenchmark.h"
 #include "BKTreeBenchmark.h"
 #include <chrono>
 
@@ -98,7 +98,6 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 
 	//free(dir);
 	//free(ent);
-	std::cerr << *dic << endl;
 	return dic;
 }
 
@@ -169,28 +168,26 @@ void run()
 	if(UserInput::getYesNo()) {
 		string file2 = "samples/errors.txt";
 
+		Trie tree = Corrector::fillTrie(dic);
 		BKTree bktree = Corrector::fillBK(dic, file2);
 
 		vector<Benchmark *> benchmarks;
-		benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
-		benchmarks.push_back(new BKTreeFillBenchmark(1, file2, dic));
-		benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, bktree));
+		benchmarks.push_back(new TrieFillBenchmark(10, dic));
+		benchmarks.push_back(new TrieCorrectBenchmark(10, file2, dic, tree));
+		benchmarks.push_back(new BKTreeFillBenchmark(3, file2, dic));
+		benchmarks.push_back(new BKTreeCorrectBenchmark(2, file2, dic, bktree));
 
 		for (size_t i = 0; i < benchmarks.size(); ++i)
 		{
-			cerr << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000 * 1000) << " seconds." << std::endl;
-			cerr << "delete start" << endl;
+			cout << "\"" << benchmarks[i]->name << "\" took an average of " << benchmarks[i]->run() / ((double)1000 * 1000 * 1000) << " seconds." << std::endl;
 			delete benchmarks[i];
-			cerr << "delete end" << endl;
 		}
 	} else {
 		string file = choose_file(TEXT_DIR);
 		if(file == "") return;
 		Corrector::correctTextDynamic(Corrector::CORRECTED_TEXT, file, *dic);
 	}
-
-	delete(dic);
-	cout << endl << "Terminating" << endl << endl;
+	delete dic;
 }
 
 int main(){

@@ -42,11 +42,6 @@ public:
 			entry->setLastEditDistance(dist);
 			output.push_back(entry);
 		}
-		/*cerr << word << ", " << entry->getWord() << this;
-		for(int i = 0 ; i < output.size(); i++){
-			cerr << output[i] <<", ";
-		}
-		cerr << endl;*/
 		int beginning = max(0, dist - maxdist);
 		int end = min( (int)children.size()-1,  dist + maxdist);
 		for(int i = beginning; i <= end; i++){
