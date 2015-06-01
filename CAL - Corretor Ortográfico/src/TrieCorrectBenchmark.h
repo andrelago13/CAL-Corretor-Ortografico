@@ -16,13 +16,13 @@
 class TrieCorrectBenchmark: public Benchmark {
 private:
 	const std::string &oldFile;
-	Dictionary &dic;
+	Dictionary *dic;
 	void f() const
 	{
-		Corrector::correctTrie(dic, oldFile);
+		Corrector::correctTrie(*dic, oldFile);
 	}
 public:
-	TrieCorrectBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic): Benchmark("Trie", times), oldFile(oldFile), dic(dic) { }
+	TrieCorrectBenchmark(unsigned times, const std::string &oldFile, Dictionary *dic): Benchmark("Trie", times), oldFile(oldFile), dic(dic) { }
 	virtual ~TrieCorrectBenchmark() {};
 };
 

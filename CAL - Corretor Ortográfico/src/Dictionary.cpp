@@ -104,8 +104,8 @@ int Dictionary::wordCount(const std::string& filename, const std::string& word) 
 	return count;
 }
 
-DictionaryEntry* Dictionary::findWord(const std::string& word) {
-	hash_table::iterator iti;
+DictionaryEntry* Dictionary::findWord(const std::string& word) const{
+	hash_table::const_iterator iti;
 	DictionaryEntry* entry = new DictionaryEntry(word);
 	iti = entries.find(entry);
 	delete entry;
@@ -161,7 +161,7 @@ Trie Dictionary::fillTrie(){
 		count++;
 		out.insertEntry(*iti, (*iti)->getWord());
 	}
-	cerr << count << endl;
+	cerr << "count: " << count << endl;
 	return out;
 }
 

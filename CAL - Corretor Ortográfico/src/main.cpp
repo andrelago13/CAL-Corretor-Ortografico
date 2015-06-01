@@ -169,7 +169,7 @@ void run()
 	//system("pause");
 
 	//string file = "example1.txt";
-	string file2 = "errors.txt";
+	string file2 = "texts/errors.txt";
 	//dic.countWholeWords(file);
 
 	//CorrectedText* corr = Corrector::correctTrie(dic, file2);
@@ -185,9 +185,9 @@ void run()
 	//cout << "Number of nodes: " << TrieNode::id << endl;
 	//cout << "Size of each node: " << sizeof(TrieNode) << endl;
 	//delete corr;
-
+/*
 	vector<Benchmark *> benchmarks;
-	//benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
+	benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
 	//benchmarks.push_back(new BKTreeFillBenchmark(1, file2, dic));
 	//benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, Corrector::fillBK(dic, file2)));
 
@@ -197,7 +197,11 @@ void run()
 		cerr << "delete start" << endl;
 		delete benchmarks[i];
 		cerr << "delete end" << endl;
-	}
+	}*/
+
+	while (1)
+		Corrector::correctTrie(*dic, file2);
+
 	delete(dic);
 	cout << "Terminating" << endl;
 }

@@ -352,7 +352,9 @@ public:
 		std::cerr << "done filling tree" << std::endl;
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
+		{
 			throw new CorrectorException( "could not open " + filename);
+		}
 		std::string line;
 		CorrectedText* out = new CorrectedText();
 		int linenum = 0;
@@ -365,7 +367,7 @@ public:
 		std::cerr << "done correcting text" << std::endl;
 		return out;
 	}
-	static CorrectedLine* correctLineTrie(Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
+	static CorrectedLine* correctLineTrie(const Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
 		//std::cerr << "correcting Line" << std::endl;
 		int wordCount = 0;
 		std::istringstream iss(line);
@@ -394,7 +396,7 @@ public:
 		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
-	static CorrectedWord* correctWordTrie(Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
+	static CorrectedWord* correctWordTrie(const Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
 		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		std::vector<DictionaryEntry*> found = tree.query(word, 2);
