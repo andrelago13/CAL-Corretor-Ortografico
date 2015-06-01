@@ -10,7 +10,7 @@
 #include "Corrector.h"
 #include "Trie.h"
 #include "Benchmark.h"
-#include "TrieBenchmark.h"
+#include "TrieCorrectBenchmark.h"
 #include "BKTreeBenchmark.h"
 #include <chrono>
 
@@ -40,12 +40,15 @@ void run()
 	//delete corr;
 
 	vector<Benchmark *> benchmarks;
-	benchmarks.push_back(new TrieBenchmark(5, file2, dic));
-	benchmarks.push_back(new BKTreeBenchmark(5, file2, dic));
+	benchmarks.push_back(new TrieCorrectBenchmark(1, file2, dic));
+	benchmarks.push_back(new BKTreeFillBenchmark(1, file2, dic));
+	benchmarks.push_back(new BKTreeCorrectBenchmark(1, file2, dic, Corrector::fillBK(dic, file2)));
 	for (size_t i = 0; i < benchmarks.size(); ++i)
 	{
-		cout << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000) << " seconds." << std::endl;
-		delete benchmarks[i];
+		cerr << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000 * 1000) << " seconds." << std::endl;
+		cerr << "delete start" << endl;
+		//delete benchmarks[i];
+		cerr << "delete end" << endl;
 	}
 }
 

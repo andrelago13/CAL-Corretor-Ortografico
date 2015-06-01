@@ -10,17 +10,31 @@
 
 #include "Benchmark.h"
 
-class BKTreeBenchmark: public Benchmark {
+class BKTreeFillBenchmark: public Benchmark {
 private:
 	const std::string &oldFile;
 	Dictionary &dic;
 	void f() const
 	{
-		Corrector::correctBK(dic, oldFile);
+		Corrector::fillBK(dic, oldFile);
 	}
 public:
-	BKTreeBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic): Benchmark("BK Tree", times), oldFile(oldFile), dic(dic) { }
-	virtual ~BKTreeBenchmark() {};
+	BKTreeFillBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic): Benchmark("Filling BK Tree", times), oldFile(oldFile), dic(dic) { }
+	virtual ~BKTreeFillBenchmark() {};
+};
+
+class BKTreeCorrectBenchmark: public Benchmark {
+private:
+	const std::string &oldFile;
+	Dictionary &dic;
+	const BKTree tree;
+	void f() const
+	{
+		Corrector::correctBK(tree, dic, oldFile);
+	}
+public:
+	BKTreeCorrectBenchmark(unsigned times, const std::string &oldFile, Dictionary &dic, const BKTree &tree): Benchmark("Correcting using BK Tree", times), oldFile(oldFile), dic(dic), tree(tree) { }
+	virtual ~BKTreeCorrectBenchmark() {};
 };
 
 #endif /* SRC_BKTREEBENCHMARK_H_ */

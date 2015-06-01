@@ -286,11 +286,14 @@ public:
 		//std::cerr << "done correcting word" << std::endl;
 		return out;
 	}
-	//TODO Strategy
-	static CorrectedText* correctBK(Dictionary& dic, std::string filename){
+
+	static BKTree fillBK(Dictionary& dic, std::string filename){
 		std::cerr << "filling tree" << std::endl;
 		BKTree tree = dic.fillBKTree();
 		std::cerr << "done filling tree" << std::endl;
+		return tree;
+	}
+	static CorrectedText* correctBK(const BKTree &tree, Dictionary& dic, std::string filename){
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
 			throw new CorrectorException( "could not open " + filename);
@@ -300,6 +303,7 @@ public:
 		while(!fin.eof()){
 			linenum++;
 			getline(fin, line);
+			correctLineBK(dic, line, linenum,tree);
 			out->addCorrection(correctLineBK(dic, line, linenum, tree));
 		}
 		fin.close();

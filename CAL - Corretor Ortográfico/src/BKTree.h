@@ -35,7 +35,6 @@ public:
 		else children[dist]->insertEntry(newEntry);
 	}
 	void query(vector<DictionaryEntry*>& output, const string& word, int maxdist) const{
-		//cerr << "query, ";
 		int dist = editDistance(word, entry->getWord());
 		if(dist <= maxdist){
 			entry->setLastEditDistance(dist);
