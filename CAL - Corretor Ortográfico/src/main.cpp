@@ -96,6 +96,11 @@ Dictionary* choose_read_dictionary(const string& dirName) {
 	Dictionary* dic = new Dictionary(dictionary, processed);
 	cout << "Done Reading dictionary" << endl;
 
+	if(!processed) {
+		dic->writeDictionary(temp);
+		cout << "Saved recently processed dictionary" << endl;
+	}
+
 	return dic;
 }
 
