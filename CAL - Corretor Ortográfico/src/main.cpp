@@ -6,9 +6,9 @@
  */
 
 #include <iostream>
-#include <dirent.h>
 #include <stdio.h>
 #include "Dictionary.h"
+#include "includes/dirent.h"
 #include "Corrector.h"
 #include "Trie.h"
 #include "Benchmark.h"
@@ -21,14 +21,8 @@
 #define TEXT_DIR ""
 #define TEXT_EXT "txt"
 
-#ifdef WINDOWS
-	#include <direct.h>
-	#define GetCurrentDir _getcwd
-#else
-	#include <unistd.h>
-	#define GetCurrentDir getcwd
-#endif
-	char cCurrentPath[FILENAME_MAX];
+#define GetCurrentDir _getcwd
+char cCurrentPath[FILENAME_MAX];
 
 using namespace std;
 
