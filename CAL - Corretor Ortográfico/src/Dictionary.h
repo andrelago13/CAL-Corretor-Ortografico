@@ -31,16 +31,19 @@ struct hstr {
 
 struct eqstr {
 	bool operator() ( const DictionaryEntry *entry1, const DictionaryEntry *entry2) const {
+		return false;
 		return *entry1 == *entry2;
 	}
 };
 
 typedef std::unordered_set<DictionaryEntry *, hstr, eqstr> hash_table;
+//typedef std::set<DictionaryEntry*, DictionaryEntry::EntryComp> hash_table;
 
 class Dictionary{
 	friend class Corrector;
 private:
 	hash_table entries;
+
 	void readProcessedDictionary(std::string filename);
 	void readUnprocessedDictionary(std::string filename);
 public:
@@ -48,7 +51,7 @@ public:
 	void countWholeWords(std::string& filename);
 	void addEntry(const std::string& filename, const std::string& word);
 	int wordCount(const std::string& filename, const std::string& word);
-	DictionaryEntry* findWord(const std::string& word);
+	DictionaryEntry* findWord(const std::string& word) const;
 	Dictionary(std::string filename, bool isProcessed);
 
 	class DictionaryException{

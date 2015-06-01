@@ -31,16 +31,20 @@ public:
 		children = NULL;
 		++id;
 	}
-	void insertEntry(DictionaryEntry* entry, const string& word, unsigned index){
+	void insertEntry(DictionaryEntry* entry, const string& word, int index){
 		if(index == word.length()){
 			endpoint = entry;
 			return;
 		}
-		unsigned mapIndex = map(word[index]);
+		int mapIndex = map(word[index]);
 		if (children == NULL)
 		{
 			children = new TrieNode*[ALPHABET_SIZE];
-			memset(children, (int)NULL, ALPHABET_SIZE * sizeof(TrieNode *));
+			//memset(children, (int)NULL, ALPHABET_SIZE * sizeof(TrieNode *));
+			for (size_t i = 0; i < ALPHABET_SIZE; ++i)
+			{
+				children[i] = NULL;
+			}
 		}
 		if (children[mapIndex] == NULL)
 		{
@@ -78,8 +82,6 @@ public:
 					matrix[index+1][i] = matrix[index][i-1];
 				}
 			}
-			//if(current == "engineers")
-			//cerr << "------------>here <-------------" << endl;
 			if(matrix[index+1][index+1] > maxdist)//check
 			{
 				return;
@@ -112,14 +114,21 @@ public:
 		delete children;
 		children = NULL;
 	}
-	size_t map(const char& c) const{
+	static int map(const unsigned char& c){
 		if(c == '\'')
 			return ALPHABET_SIZE - 1;
 		else if(c == '-')
 			return  ALPHABET_SIZE-2;
+
 		if(islower(c))
 			return c-'a' +26;
-		else return c-'A';
+		else if (isupper(c))
+			return c-'A';
+		else
+		{
+			cerr << "Unknown character found (ASCII code " << (unsigned)c << ")." << endl;
+			exit(1);
+		}
 	}
 	void print(string& word){
 		cerr << word << "\n";

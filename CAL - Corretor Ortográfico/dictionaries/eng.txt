@@ -1937,8 +1937,8 @@ Boers
 Boethius
 Bogart
 Bogart's
-Bogotá
-Bogotá's
+Bogota
+Bogota's
 Bohemia
 Bohemian
 Bohemian's
@@ -4480,7 +4480,7 @@ Dutchman's
 Dutchmen
 Duvalier
 Dvina
-Dvorák
+Dvorak
 Dwayne
 Dwayne's
 Dwight
@@ -4941,8 +4941,8 @@ Estelle
 Estelle's
 Ester
 Ester's
-Esterházy
-Esterházy's
+Esterhazy
+Esterhazy's
 Estes
 Esther
 Esther's
@@ -11600,8 +11600,8 @@ Paramaribo
 Paramaribo's
 Paramount
 Paramount's
-Paraná
-Paraná's
+Parana
+Parana's
 Parcheesi
 Parcheesi's
 Pareto
@@ -15520,9 +15520,9 @@ Velma
 Velma's
 Velveeta
 Velveeta's
-Velásquez
-Velásquez's
-Velázquez
+Velasquez
+Velasquez's
+Velazquez
 Venetian
 Venetian's
 Venetians

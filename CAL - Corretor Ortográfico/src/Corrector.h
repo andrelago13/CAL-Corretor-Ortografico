@@ -192,7 +192,7 @@ public:
 		}
 	}
 	friend std::ostream& operator<<(std::ostream& os, CorrectedText* cw){
-		os << "Text Corrections: " << std::endl;
+		os << "Text Corrections (" << cw->textCorrections.size() << "): " << std::endl;
 		std::vector<CorrectedLine*>::iterator iti = cw->textCorrections.begin();
 		std::vector<CorrectedLine*>::iterator ite = cw->textCorrections.end();
 		int num = 0;
@@ -275,7 +275,7 @@ public:
 		hash_table::iterator iti = dic.entries.begin();
 		hash_table::iterator ite = dic.entries.end();
 		for(; iti != ite; ++iti){
-			if(correctorValidation(word, (*iti)->getWord())){
+			if(correctorValidation(word, (*iti)->getWord())){\
 				(*iti)->calculateEditDistance(word);
 				out->addCorrection(*iti);
 			}
@@ -283,11 +283,14 @@ public:
 		//std::cerr << "done correcting word" << std::endl;
 		return out;
 	}
-	//TODO Strategy
-	static CorrectedText* correctBK(Dictionary& dic, std::string filename){
+
+	static BKTree fillBK(Dictionary *dic, std::string filename){
 		std::cerr << "filling tree" << std::endl;
-		BKTree tree = dic.fillBKTree();
+		BKTree tree = dic->fillBKTree();
 		std::cerr << "done filling tree" << std::endl;
+		return tree;
+	}
+	static CorrectedText* correctBK(const BKTree &tree, Dictionary& dic, std::string filename){
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
 			throw new CorrectorException( "could not open " + filename);
@@ -348,7 +351,9 @@ public:
 		std::cerr << "done filling tree" << std::endl;
 		std::ifstream fin(filename.c_str());
 		if(!fin.is_open())
+		{
 			throw new CorrectorException( "could not open " + filename);
+		}
 		std::string line;
 		CorrectedText* out = new CorrectedText();
 		int linenum = 0;
@@ -356,30 +361,43 @@ public:
 			linenum++;
 			getline(fin, line);
 			out->addCorrection(correctLineTrie(dic, line, linenum, tree));
-			//cout << out << endl;
 		}
 		fin.close();
 		std::cerr << "done correcting text" << std::endl;
 		return out;
 	}
-	static CorrectedLine* correctLineTrie(Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
+	static CorrectedLine* correctLineTrie(const Dictionary& dic, const std::string& line, int linenum, const Trie& tree){
 		//std::cerr << "correcting Line" << std::endl;
+		int wordCount = 0;
 		std::istringstream iss(line);
 		std::string token;
 		CorrectedLine* out = NULL;
+		int errorCount = 0;
+		bool in = false;
 		while(getline(iss, token, ' '))
 		{
+			in = true;
 			// TODO change way string is "run" to include commas
 			unsigned int i;
 			for(i = token.length(); i >= 0; i-- ){
 				if(isalpha(token[i]))
 					break;
 			}
+			token = token.substr(0,i+1);
+			if(token.length() == 0 )
+				continue;
+			wordCount++;
+			if(dic.findWord(token) == NULL){
+				errorCount++;
+				if(out == NULL)
+					out = new CorrectedLine(linenum);
+				out->addCorrection(correctWordTrie(dic, token,wordCount, tree));
+			}
 		}
 		//std::cerr << "done correcting Line" << std::endl;
 		return out;
 	}
-	static CorrectedWord* correctWordTrie(Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
+	static CorrectedWord* correctWordTrie(const Dictionary& dic, std::string& word, int wordnum,  const Trie& tree){
 		//std::cerr << "correcting word" << std::endl;
 		CorrectedWord* out = new CorrectedWord(word, wordnum);
 		std::vector<DictionaryEntry*> found = tree.query(word, 2);
