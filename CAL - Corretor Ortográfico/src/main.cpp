@@ -31,7 +31,7 @@ bool file_exists(const string& filename) {
 	}
 }
 
-string choose_dictionary(const string& dirName) {
+Dictionary* choose_read_dictionary(const string& dirName) {
 	DIR *dir;
 	struct dirent *ent;
 	vector<string> dictionaries;
@@ -47,14 +47,14 @@ string choose_dictionary(const string& dirName) {
 		closedir (dir);
 	} else {
 		cerr << "Error reading dictionaries folder" << endl;
-		return "";
+		return NULL;
 	}
 
 	string dictionary = DICTIONARY_DIR;
 
 	if(dictionaries.size() == 0) {
 		cout << "No dictionary files were found." << endl;
-		return "";
+		return NULL;
 	}
 
 	bool processed = false;
@@ -69,31 +69,31 @@ string choose_dictionary(const string& dirName) {
 		}
 		int option = UserInput::getInt(1, dictionaries.size());
 		dictionary += dictionaries[option-1];
-
-		string temp = dictionary;
-		temp.insert(dictionary.find_last_of("."), "_p");
-		cout << temp << endl;
-
-		if(file_exists(temp)) {
-			dictionary = temp;
-			processed = true;
-		}
-		cout << "Chosen " << dictionary << endl;
 	}
 
-	return dictionary;
+	string temp = dictionary;
+	temp.insert(dictionary.find_last_of("."), "_p");
+
+	if(file_exists(temp)) {
+		dictionary = temp;
+		processed = true;
+		cout << "Switched to " << dictionary << " because it is already processed." << endl;
+	}
+
+	cout << "Reading dictionary" << endl;
+	Dictionary* dic = new Dictionary(dictionary, processed);
+	cout << "Done Reading dictionary" << endl;
+
+	return dic;
 }
 
 void run()
 {
-	string dictionary = choose_dictionary(DICTIONARY_DIR);
-	if(dictionary == "") return;
+	Dictionary* dic = choose_read_dictionary(DICTIONARY_DIR);
+	if(dic == NULL) return;
 
 	system("pause");
 
-	cout << "Reading dictionary" << endl;
-	Dictionary dic(dictionary, true);
-	cout << "Done Reading dictionary" << endl;
 	string file = "example1.txt";
 	string file2 = "errors.txt";
 	//dic.countWholeWords(file);
@@ -101,7 +101,7 @@ void run()
 	//CorrectedText* corr = Corrector::correctTrie(dic, file2);
 	//	Trie tree =  dic.fillTrie();
 
-	Corrector::correctTextDynamic("corrected_text.txt", file2, dic);
+	Corrector::correctTextDynamic("corrected_text.txt", file2, *dic);
 
 	//tree.print();
 	//dic.debug();
@@ -113,8 +113,8 @@ void run()
 	//delete corr;
 
 	vector<Benchmark *> benchmarks;
-	benchmarks.push_back(new TrieBenchmark(5, file2, dic));
-	benchmarks.push_back(new BKTreeBenchmark(5, file2, dic));
+	benchmarks.push_back(new TrieBenchmark(5, file2, *dic));
+	benchmarks.push_back(new BKTreeBenchmark(5, file2, *dic));
 	for (size_t i = 0; i < benchmarks.size(); ++i)
 	{
 		cout << benchmarks[i]->name << " took " << benchmarks[i]->run() / ((double)1000 * 1000) << " seconds." << std::endl;
